@@ -1,0 +1,6 @@
+# Configurazione per Netlify, usata quando il sito è collegato a un
+# repository Git: a ogni pubblicazione rigenera l'indice delle dispense
+# e poi pubblica l'intera cartella del progetto.
+[build]
+  command = "node strumenti/aggiorna-indice.mjs"
+  publish = "."
