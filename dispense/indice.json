@@ -1,6 +1,50 @@
 [
   {
+    "info": "dispense/Appunti_MachineLearning_IA.yml",
+    "file": "dispense/Appunti_MachineLearning_IA.pdf"
+  },
+  {
     "info": "dispense/Database_Completa.yml",
-    "file": "dispense/Database_Completa.pptx"
+    "file": "dispense/Database_Completa.pdf"
+  },
+  {
+    "info": "dispense/Db_Pratica_e_SQL.yml",
+    "file": "dispense/Db_Pratica_e_SQL.pdf"
+  },
+  {
+    "info": "dispense/Elementi_di_Economia_GPOI.yml",
+    "file": "dispense/Elementi_di_Economia_GPOI.pdf"
+  },
+  {
+    "info": "dispense/Rivoluzione Americana Storia.yml",
+    "file": "dispense/Rivoluzione Americana Storia.pdf"
+  },
+  {
+    "info": "dispense/Servizi_Laboratorio.yml",
+    "file": "dispense/Servizi_Laboratorio.pdf"
+  },
+  {
+    "info": "dispense/appunti_db_teoria_informatica.yml",
+    "file": "dispense/appunti_db_teoria_informatica.pdf"
+  },
+  {
+    "info": "dispense/curve_geometria_analitica.yml",
+    "file": "dispense/curve_geometria_analitica.PNG"
+  },
+  {
+    "info": "dispense/formulario_derivate.yml",
+    "file": "dispense/formulario_derivate.jpeg"
+  },
+  {
+    "info": "dispense/napoleone_storia.yml",
+    "file": "dispense/napoleone_storia.pdf"
+  },
+  {
+    "info": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.yml",
+    "file": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf"
+  },
+  {
+    "info": "dispense/risorse/riassuntozzo_livello4_sistemi e reti.yml",
+    "file": "dispense/risorse/riassuntozzo_livello4_sistemi e reti.pdf"
   }
 ]

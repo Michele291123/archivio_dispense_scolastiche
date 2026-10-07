@@ -17,6 +17,7 @@ export const SUBJECTS = [
   { name: 'Sistemi e Reti', color: '#3fc4c0' },
   { name: 'Matematica', color: '#ee8f45' },
   { name: 'Inglese', color: '#e56f9f' },
+  { name: 'IA', color: '#a5c94e' },
 ];
 
 // Una materia che non è in elenco crea una cartella in più, con questo colore.
