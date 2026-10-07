@@ -55,12 +55,20 @@ cartella: deve corrispondere a uno dei nomi in `js/config.js` (maiuscole,
 accenti e trattini non contano). Una materia non in elenco crea una cartella
 nuova.
 
+### Dispense senza `.yml`
+
+Un file senza il suo `.yml` compare comunque: il titolo è il nome del file,
+la descrizione è "descrizione vuota" e l'autore "autore sconosciuto". La
+materia viene cercata nel nome del file: `DB_Informatica.pdf` finisce in
+Informatica, `appunti-sistemi-e-reti.pdf` in Sistemi e Reti. Se nel nome non
+c'è nessuna materia, la dispensa va in "Senza materia".
+
 ### Perché serve l'indice
 
 Una pagina web non può sfogliare una cartella del server, quindi il sito legge
 `dispense/indice.json` per sapere quali dispense esistono; i dati li prende poi
 dai singoli `.yml`. Lo script rigenera l'indice e segnala i file senza `.yml`
-e i `.yml` senza file.
+(che compaiono con i dati ricavati dal nome) e i `.yml` senza file.
 
 Se il sito sta su GitHub, il workflow in `.github/workflows/` esegue lo script
 a ogni push che tocca `dispense/` (ramo `main`): lì basta caricare i due file.

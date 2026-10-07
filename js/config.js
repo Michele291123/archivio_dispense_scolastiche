@@ -24,3 +24,8 @@ export const EXTRA_COLOR = '#a39d92';
 
 // Cartella delle dispense prive del campo "materia".
 export const NO_SUBJECT = 'Senza materia';
+
+// Dispense senza file .yml: la materia si ricava dal nome del file
+// ("DB_Informatica.pdf" finisce in Informatica), il titolo è il nome del file.
+export const NO_DESCRIPTION = 'descrizione vuota';
+export const NO_AUTHOR = 'autore sconosciuto';

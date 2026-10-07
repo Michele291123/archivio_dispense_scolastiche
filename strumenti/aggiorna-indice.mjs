@@ -6,6 +6,8 @@
 //
 // Una dispensa è una coppia di file con lo stesso nome dentro dispense/,
 // anche in sottocartelle:  appunti.pdf  +  appunti.yml
+// Un file senza .yml entra comunque nell'indice: il sito ne ricava materia
+// e titolo dal nome.
 
 import { readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, parse, relative, sep } from 'node:path';
@@ -52,7 +54,10 @@ for (const { info, files } of pairs.values()) {
   } else if (info) {
     warnings.push(`${info}: manca il file della dispensa`);
   } else {
-    for (const file of files) warnings.push(`${file}: manca il file .yml, la dispensa non comparirà`);
+    for (const file of files) {
+      index.push({ file });
+      warnings.push(`${file}: manca il file .yml, uso il nome del file`);
+    }
   }
 }
 
