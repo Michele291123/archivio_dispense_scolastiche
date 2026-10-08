@@ -2,7 +2,8 @@
 # L'action (strumenti/issue-in-pr.mjs) legge da qui la materia e gli argomenti
 # e aggiunge da sola i nuovi argomenti alla tendina: non cambiare gli id, le
 # etichette (label) e la forma delle voci sotto "options".
-name: IA
+# GitHub vuole un nome di almeno 3 caratteri: la materia resta "IA" nella tendina.
+name: IA (Intelligenza artificiale)
 description: Proponi una dispensa di IA
 title: "[IA] "
 body:
