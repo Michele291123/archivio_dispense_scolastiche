@@ -47,6 +47,7 @@ body:
       label: Argomento
       description: La cartella dentro TPSIT. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
+        - "CONCORRENZA"
         - "Nuovo argomento"
     validations:
       required: true
