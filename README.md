@@ -47,7 +47,8 @@ Serve solo un account GitHub.
    - **Argomento** è la cartella dentro la materia. Se quella che ti serve non
      c'è, scegli "Nuovo argomento" e scrivi il nome nel campo sotto.
    - **File**: uno solo, al massimo 50 MB. Formati ammessi: pdf, png, jpg, jpeg,
-     gif, webp, doc, docx, xls, xlsx, ppt, pptx, odt, ods, odp, txt, zip.
+     gif, webp, doc, docx, xls, xlsx, pptx, odt, ods, odp, txt, zip (i vecchi
+     .ppt GitHub non li fa caricare: salvali come .pptx o mettili in uno zip).
 4. Invia. Entro un minuto circa un commento sulla issue ti dà il link alla pull
    request preparata in automatico, oppure ti dice cosa correggere. In quel
    caso apri una nuova issue: modificare quella vecchia non fa ripartire il

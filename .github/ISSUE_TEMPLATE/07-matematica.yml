@@ -64,4 +64,4 @@ body:
       description: Un solo file (per più file usa uno zip). Formati ammessi - pdf, immagini, Word, Excel, PowerPoint, OpenDocument, txt, zip.
     validations:
       required: true
-      accept: ".pdf,.png,.jpg,.jpeg,.gif,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp,.txt,.zip"
+      accept: ".pdf,.png,.jpg,.jpeg,.gif,.webp,.doc,.docx,.xls,.xlsx,.pptx,.odt,.ods,.odp,.txt,.zip"
