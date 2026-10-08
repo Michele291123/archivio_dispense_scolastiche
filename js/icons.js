@@ -3,6 +3,7 @@
 const PATHS = {
   back: '<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>',
   download: '<path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/>',
+  upload: '<path d="M12 16V5"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/>',
 };
 
 export function icon(name) {

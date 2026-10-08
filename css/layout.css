@@ -66,6 +66,17 @@
   font: 400 0.85rem/1.5 var(--font-mono);
 }
 
+/* Il nome di un argomento è più lungo di quello di una materia */
+.page-title--topic {
+  font-size: clamp(2.4rem, 7.5vw, 4.75rem);
+  line-height: 0.92;
+}
+
+/* Bottone sotto il titolo della pagina iniziale */
+.page-head__action {
+  margin-top: clamp(20px, 3vw, 28px);
+}
+
 /* Griglia delle cartelle ------------------------------------------------- */
 
 .folders {
@@ -86,9 +97,11 @@
   gap: 40px 22px;
 }
 
-/* Risultati di ricerca: un gruppo per materia ---------------------------- */
+/* Gruppi con un titolo: i risultati di ricerca divisi per materia e, nella
+   pagina di una materia, le dispense senza argomento sotto le cartelle ---- */
 
-.group + .group {
+.group + .group,
+.folders + .group {
   margin-top: clamp(44px, 7vw, 72px);
 }
 

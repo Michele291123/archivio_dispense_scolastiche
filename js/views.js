@@ -1,14 +1,15 @@
 // Le viste: ogni funzione restituisce l'elemento da mettere dentro <main>.
 
-import { SITE_TITLE } from './config.js';
+import { REPO_URL, SITE_TITLE } from './config.js';
 import { el } from './dom.js';
 import { icon } from './icons.js';
 import { countDocs, fold } from './text.js';
 
 /* Pezzi riutilizzati ------------------------------------------------------ */
 
-function backLink() {
-  return el('a', { class: 'crumb', href: '#/' }, icon('back'), 'Archivio');
+// Link per tornare indietro: all'archivio oppure, da un argomento, alla materia.
+function backLink(label = 'Archivio', href = '#/') {
+  return el('a', { class: 'crumb', href }, icon('back'), label);
 }
 
 function message(title, ...paragraphs) {
@@ -31,6 +32,16 @@ function folderCard(subject) {
     },
     el('span', { class: 'folder__tab' }, total ? countDocs(total) : 'vuota'),
     el('span', { class: 'folder__body' }, el('span', { class: 'folder__name' }, subject.name)),
+  );
+}
+
+// Cartella di un argomento dentro una materia: stesso aspetto, colore della materia.
+function topicCard(subject, topic) {
+  return el(
+    'a',
+    { class: 'folder', href: `#/materia/${subject.slug}/${topic.slug}`, accent: subject.color },
+    el('span', { class: 'folder__tab' }, countDocs(topic.docs.length)),
+    el('span', { class: 'folder__body' }, el('span', { class: 'folder__name' }, topic.name)),
   );
 }
 
@@ -93,14 +104,23 @@ export function homeView({ subjects, docs }) {
       { class: 'page-head' },
       el('h1', { class: 'page-title' }, SITE_TITLE),
       el('p', { class: 'page-note' }, `${countDocs(docs.length)} in ${subjects.length} cartelle`),
+      // Porta alla scelta del modulo su GitHub: una issue per proporre la dispensa
+      el(
+        'a',
+        { class: 'button page-head__action', href: `${REPO_URL}/issues/new/choose`, target: '_blank', rel: 'noopener' },
+        icon('upload'),
+        'Carica dispensa',
+      ),
     ),
     el('ul', { class: 'folders' }, subjects.map((subject) => el('li', {}, folderCard(subject)))),
   );
 }
 
-// Una cartella aperta: le dispense di quella materia.
+// Una materia aperta: le cartelle degli argomenti e, sotto, le dispense
+// che non hanno un argomento.
 export function subjectView(subject) {
   const total = subject.docs.length;
+  const { topics, loose } = subject;
 
   return el(
     'div',
@@ -112,20 +132,45 @@ export function subjectView(subject) {
       el('div', { class: 'page-head__row' }, el('h1', { class: 'page-title' }, subject.name)),
       total > 0 && el('p', { class: 'page-note' }, countDocs(total)),
     ),
-    total > 0
-      ? docGrid(subject.docs, 'h2')
-      : message(
-          'Cartella vuota',
-          text(
-            'Per aggiungere una dispensa metti in ',
-            code('dispense/'),
-            ' il file e il suo ',
-            code('.yml'),
-            ' con ',
-            code(`materia: ${subject.name}`),
-            ', poi aggiorna l\u2019indice.',
-          ),
+    topics.length > 0 && el('ul', { class: 'folders' }, topics.map((topic) => el('li', {}, topicCard(subject, topic)))),
+    topics.length > 0 &&
+      loose.length > 0 &&
+      el(
+        'section',
+        { class: 'group', accent: subject.color },
+        el('h2', { class: 'group__title' }, 'Senza argomento'),
+        docGrid(loose, 'h3'),
+      ),
+    topics.length === 0 && loose.length > 0 && docGrid(loose, 'h2'),
+    total === 0 &&
+      message(
+        'Cartella vuota',
+        text(
+          'Per aggiungere una dispensa usa \u201cCarica dispensa\u201d nella pagina iniziale, oppure metti in ',
+          code('dispense/'),
+          ' il file e il suo ',
+          code('.yml'),
+          ' con ',
+          code(`materia: ${subject.name}`),
+          ', poi aggiorna l\u2019indice.',
         ),
+      ),
+  );
+}
+
+// Un argomento aperto: le sue dispense e il link per tornare alla materia.
+export function topicView(subject, topic) {
+  return el(
+    'div',
+    { class: 'view' },
+    el(
+      'header',
+      { class: 'page-head page-head--accent', accent: subject.color },
+      backLink(subject.name, `#/materia/${subject.slug}`),
+      el('div', { class: 'page-head__row' }, el('h1', { class: 'page-title page-title--topic' }, topic.name)),
+      el('p', { class: 'page-note' }, countDocs(topic.docs.length)),
+    ),
+    docGrid(topic.docs, 'h2'),
   );
 }
 
@@ -158,17 +203,63 @@ export function searchView({ subjects }, query) {
             docGrid(docs, 'h3'),
           ),
         )
-      : message('Nessun risultato', text('La ricerca guarda titolo, descrizione, autore e nome del file. Prova con un\u2019altra parola.')),
+      : message('Nessun risultato', text('La ricerca guarda titolo, descrizione, autore, materia, argomento e nome del file. Prova con un\u2019altra parola.')),
   );
 }
 
-// Indirizzo di una cartella che non esiste.
-export function notFoundView() {
+// Indirizzo di una cartella che non esiste: una materia oppure, se la materia
+// c'\u00e8, un suo argomento.
+export function notFoundView(subject) {
   return el(
     'div',
     { class: 'view' },
-    el('header', { class: 'page-head' }, backLink()),
-    message('Cartella inesistente', text('Questo indirizzo non corrisponde a nessuna materia dell\u2019archivio.')),
+    el('header', { class: 'page-head' }, subject ? backLink(subject.name, `#/materia/${subject.slug}`) : backLink()),
+    subject
+      ? message('Argomento inesistente', text(`Questo indirizzo non corrisponde a nessun argomento di ${subject.name}.`))
+      : message('Cartella inesistente', text('Questo indirizzo non corrisponde a nessuna materia dell\u2019archivio.')),
+  );
+}
+
+// Schermata iniziale: chiede la password prima di mostrare l'archivio.
+// "check" riceve il testo scritto e dice se \u00e8 giusto; "onUnlock" apre il sito.
+export function lockView(check, onUnlock) {
+  const input = el('input', {
+    class: 'lock__input',
+    type: 'password',
+    placeholder: 'Password',
+    'aria-label': 'Password',
+    autocomplete: 'current-password',
+    required: true,
+  });
+  const error = el('p', { class: 'lock__error', role: 'alert' });
+  const form = el(
+    'form',
+    { class: 'lock' },
+    el('div', { class: 'lock__row' }, input, el('button', { class: 'button', type: 'submit' }, 'Entra')),
+    error,
+  );
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (check(input.value)) {
+      onUnlock();
+      return;
+    }
+
+    error.textContent = 'Password sbagliata, riprova.';
+    input.select();
+  });
+
+  return el(
+    'div',
+    { class: 'view' },
+    el(
+      'header',
+      { class: 'page-head' },
+      el('h1', { class: 'page-title' }, SITE_TITLE),
+      el('p', { class: 'page-note' }, 'Per entrare serve la password della classe.'),
+    ),
+    form,
   );
 }
 

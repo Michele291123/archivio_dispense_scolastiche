@@ -1,5 +1,6 @@
 // Carica l'archivio: legge l'indice, poi il .yml di ogni dispensa,
 // e distribuisce le dispense nelle cartelle in base al campo "materia".
+// Dentro ogni materia il campo facoltativo "argomento" crea una sottocartella.
 // Una dispensa senza .yml compare lo stesso, con i dati ricavati dal nome del file.
 
 import { EXTRA_COLOR, INDEX_URL, NO_AUTHOR, NO_DESCRIPTION, NO_SUBJECT, SUBJECTS } from './config.js';
@@ -43,18 +44,48 @@ async function loadDoc(entry) {
   const description = info ? info.descrizione || '' : NO_DESCRIPTION;
   const author = info ? info.autore || '' : NO_AUTHOR;
   const subject = info ? info.materia || NO_SUBJECT : subjectFromFileName(fileName);
+  // Senza argomento la dispensa resta direttamente nella cartella della materia.
+  const topic = info ? info.argomento || '' : '';
 
   return {
     title,
     description,
     author,
     subject,
+    topic,
     fileName,
     url: toUrl(entry.file),
     type: fileType(fileName),
     // Testo su cui lavora la ricerca
-    haystack: fold([title, description, author, subject, fileName].join(' ')),
+    haystack: fold([title, description, author, subject, topic, fileName].join(' ')),
   };
+}
+
+// Divide le dispense di una materia in cartelle di argomento (subject.topics)
+// e dispense senza argomento (subject.loose). Due nomi che differiscono solo
+// per maiuscole, accenti o trattini sono lo stesso argomento.
+function groupByTopic(subject) {
+  const bySlug = new Map();
+  subject.topics = [];
+  subject.loose = [];
+
+  for (const doc of subject.docs) {
+    const slug = slugify(doc.topic);
+    if (!slug) {
+      subject.loose.push(doc);
+      continue;
+    }
+
+    let topic = bySlug.get(slug);
+    if (!topic) {
+      topic = { name: doc.topic, slug, color: subject.color, docs: [] };
+      bySlug.set(slug, topic);
+      subject.topics.push(topic);
+    }
+    topic.docs.push(doc);
+  }
+
+  subject.topics.sort((a, b) => a.name.localeCompare(b.name, 'it', { numeric: true, sensitivity: 'base' }));
 }
 
 export async function loadArchive() {
@@ -82,6 +113,8 @@ export async function loadArchive() {
     doc.color = subject.color;
     subject.docs.push(doc);
   }
+
+  subjects.forEach(groupByTopic);
 
   return { subjects, docs };
 }

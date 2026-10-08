@@ -137,6 +137,84 @@
   display: block;
 }
 
+/* Bottone: "Carica dispensa", "Entra" ------------------------------------ */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px 0 16px;
+  border: 1px solid var(--text);
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--bg);
+  font: 500 0.82rem/1 var(--font-mono);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.button:hover {
+  background: transparent;
+  color: var(--text);
+}
+
+/* Senza icona i due lati hanno lo stesso margine */
+button.button {
+  padding-inline: 20px;
+}
+
+/* Password all'ingresso --------------------------------------------------- */
+
+.lock {
+  max-width: 420px;
+}
+
+.lock__row {
+  display: flex;
+  gap: 10px;
+}
+
+.lock__input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  outline: 0;
+  background: var(--surface);
+  transition: border-color 0.18s ease, background-color 0.25s ease;
+}
+
+.lock__input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.lock__input:focus {
+  border-color: var(--text);
+}
+
+.lock__error {
+  min-height: 1.5em;
+  margin-top: 12px;
+  padding-inline: 18px;
+  color: var(--muted);
+  font: 400 0.78rem/1.5 var(--font-mono);
+}
+
+/* Finché la password non è stata inserita la ricerca non serve */
+html[data-locked] .search {
+  visibility: hidden;
+}
+
+html[data-locked] .state--loading {
+  display: none;
+}
+
 /* Cartella --------------------------------------------------------------- */
 
 .folder {

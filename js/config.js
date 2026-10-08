@@ -2,6 +2,15 @@
 
 export const SITE_TITLE = 'Archivio dispense';
 
+// Repository su GitHub: il tasto "Carica dispensa" apre da qui i moduli con
+// cui proporre una dispensa.
+export const REPO_URL = 'https://github.com/Michele291123/archivio_dispense_scolastiche';
+
+// Password chiesta all'apertura del sito. Tiene lontani i curiosi e basta:
+// è scritta qui in chiaro e i file in dispense/ restano raggiungibili da chi
+// ne conosce l'indirizzo. Non usarla per proteggere qualcosa di riservato.
+export const PASSWORD = '$efiles@';
+
 // Elenco delle dispense, generato da strumenti/aggiorna-indice.mjs
 export const INDEX_URL = 'dispense/indice.json';
 

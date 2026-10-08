@@ -1,0 +1,35 @@
+# Trasforma una issue aperta con uno dei moduli in una pull request che
+# aggiunge la dispensa. La pull request va poi accettata a mano.
+#
+# Il contenuto della issue non è fidato: qui non compare mai dentro un comando.
+# Lo script lo legge da solo dal file dell'evento (GITHUB_EVENT_PATH).
+name: Proposta di dispensa
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: proposta-dispensa-${{ github.event.issue.number }}
+
+jobs:
+  pull-request:
+    name: Prepara la pull request
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Dalla issue alla pull request
+        run: node strumenti/issue-in-pr.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

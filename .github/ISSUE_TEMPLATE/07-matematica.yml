@@ -1,0 +1,67 @@
+# Modulo per proporre una dispensa di Matematica.
+# L'action (strumenti/issue-in-pr.mjs) legge da qui la materia e gli argomenti
+# e aggiunge da sola i nuovi argomenti alla tendina: non cambiare gli id, le
+# etichette (label) e la forma delle voci sotto "options".
+name: Matematica
+description: Proponi una dispensa di Matematica
+title: "[Matematica] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Compila i campi e carica il file. Dopo l'invio viene preparata in automatico una pull request: un collaboratore la controlla e, se va bene, la dispensa compare nell'archivio.
+  - type: dropdown
+    id: materia
+    attributes:
+      label: Materia
+      description: È già quella giusta, lasciala così. Per un'altra materia usa il suo modulo.
+      options:
+        - "Matematica"
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: titolo
+    attributes:
+      label: Titolo
+      description: Il nome con cui la dispensa compare nell'archivio.
+    validations:
+      required: true
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione
+      description: Facoltativa. Una o due frasi su cosa contiene.
+    validations:
+      required: false
+  - type: input
+    id: autore
+    attributes:
+      label: Autore
+      description: Chi ha scritto la dispensa.
+    validations:
+      required: true
+  - type: dropdown
+    id: argomento
+    attributes:
+      label: Argomento
+      description: La cartella dentro Matematica. Se non c'è quella che ti serve scegli "Nuovo argomento".
+      options:
+        - "Nuovo argomento"
+    validations:
+      required: true
+  - type: input
+    id: nuovo-argomento
+    attributes:
+      label: Nuovo argomento
+      description: Da compilare solo se sopra hai scelto "Nuovo argomento". Un nome breve, per esempio il capitolo o il tema.
+    validations:
+      required: false
+  - type: upload
+    id: file
+    attributes:
+      label: File
+      description: Un solo file (per più file usa uno zip). Formati ammessi - pdf, immagini, Word, Excel, PowerPoint, OpenDocument, txt, zip.
+    validations:
+      required: true
+      accept: ".pdf,.png,.jpg,.jpeg,.gif,.webp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp,.txt,.zip"
