@@ -146,7 +146,7 @@ export function subjectView(subject) {
       message(
         'Cartella vuota',
         text(
-          'Per aggiungere una dispensa usa il bottone apposito in home page',
+          'Per aggiungere una dispensa usa il bottone in home page',
         ),
       ),
   );
