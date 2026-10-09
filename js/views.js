@@ -146,13 +146,7 @@ export function subjectView(subject) {
       message(
         'Cartella vuota',
         text(
-          'Per aggiungere una dispensa usa \u201cCarica dispensa\u201d nella pagina iniziale, oppure metti in ',
-          code('dispense/'),
-          ' il file e il suo ',
-          code('.yml'),
-          ' con ',
-          code(`materia: ${subject.name}`),
-          ', poi aggiorna l\u2019indice.',
+          'Per aggiungere una dispensa usa il bottone apposito in home page',
         ),
       ),
   );
