@@ -47,6 +47,7 @@ body:
       label: Argomento
       description: La cartella dentro Inglese. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
+        - "Job"
         - "Nuovo argomento"
     validations:
       required: true
