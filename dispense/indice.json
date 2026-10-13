@@ -4,6 +4,10 @@
     "file": "dispense/Appunti_MachineLearning_IA.pdf"
   },
   {
+    "info": "dispense/Baudelaire_e_Scapigliatura.yml",
+    "file": "dispense/Baudelaire_e_Scapigliatura.pdf"
+  },
+  {
     "info": "dispense/Database_Completa.yml",
     "file": "dispense/Database_Completa.pdf"
   },
@@ -32,6 +36,10 @@
     "file": "dispense/appunti_db_teoria_informatica.pdf"
   },
   {
+    "info": "dispense/claude-assets/dispense-studio.yml",
+    "file": "dispense/claude-assets/dispense-studio.skill"
+  },
+  {
     "info": "dispense/curve_geometria_analitica.yml",
     "file": "dispense/curve_geometria_analitica.PNG"
   },
@@ -44,6 +52,10 @@
     "file": "dispense/formulario_derivate.jpeg"
   },
   {
+    "info": "dispense/inglese/job/cv_cover_letter_interviews_studio.yml",
+    "file": "dispense/inglese/job/cv_cover_letter_interviews_studio.pdf"
+  },
+  {
     "info": "dispense/napoleone_storia.yml",
     "file": "dispense/napoleone_storia.pdf"
   },
@@ -52,7 +64,23 @@
     "file": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf"
   },
   {
-    "info": "dispense/risorse/riassuntozzo_livello4_sistemi e reti.yml",
-    "file": "dispense/risorse/riassuntozzo_livello4_sistemi e reti.pdf"
+    "info": "dispense/sistemi-e-reti/livello-4-trasporto/livello_applicazione_sistemi_reti.yml",
+    "file": "dispense/sistemi-e-reti/livello-4-trasporto/livello_applicazione_sistemi_reti.pdf"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/livello-4-trasporto/livello_trasporto.yml",
+    "file": "dispense/sistemi-e-reti/livello-4-trasporto/livello_trasporto.pdf"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi e reti.yml",
+    "file": "dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi e reti.pdf"
+  },
+  {
+    "info": "dispense/tpsit/concorrenza/concorrenza.yml",
+    "file": "dispense/tpsit/concorrenza/concorrenza.pptx"
+  },
+  {
+    "info": "dispense/tpsit/java/java-programmazione-a-oggetti.yml",
+    "file": "dispense/tpsit/java/java-programmazione-a-oggetti.pdf"
   }
 ]
