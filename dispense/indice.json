@@ -1,5 +1,9 @@
 [
   {
+    "info": "dispense/1.1-machine-learning.yml",
+    "file": "dispense/1.1-machine-learning.pdf"
+  },
+  {
     "info": "dispense/Appunti_MachineLearning_IA.yml",
     "file": "dispense/Appunti_MachineLearning_IA.pdf"
   },
@@ -52,8 +56,24 @@
     "file": "dispense/formulario_derivate.jpeg"
   },
   {
+    "info": "dispense/informatica/sql/join_sql.yml",
+    "file": "dispense/informatica/sql/join_sql.png"
+  },
+  {
+    "info": "dispense/informatica/sql/ordine_esecuzione_sql.yml",
+    "file": "dispense/informatica/sql/ordine_esecuzione_sql.png"
+  },
+  {
     "info": "dispense/inglese/job/cv_cover_letter_interviews_studio.yml",
     "file": "dispense/inglese/job/cv_cover_letter_interviews_studio.pdf"
+  },
+  {
+    "info": "dispense/matematica/funzioni-2-variabili/funzioni_in_2_variabili.yml",
+    "file": "dispense/matematica/funzioni-2-variabili/funzioni_in_2_variabili.pdf"
+  },
+  {
+    "info": "dispense/matematica/funzioni-2-variabili/funzioni_in_due_variabili_matematica.yml",
+    "file": "dispense/matematica/funzioni-2-variabili/funzioni_in_due_variabili_matematica.pdf"
   },
   {
     "info": "dispense/napoleone_storia.yml",
@@ -62,6 +82,18 @@
   {
     "info": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.yml",
     "file": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/esempi_posta_dns_ftp.yml",
+    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/esempi_posta_dns_ftp.zip"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/esempio.yml",
+    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/esempio.zip"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/federici_posta1.yml",
+    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/federici_posta1.zip"
   },
   {
     "info": "dispense/sistemi-e-reti/livello-4-trasporto/livello_applicazione_sistemi_reti.yml",
