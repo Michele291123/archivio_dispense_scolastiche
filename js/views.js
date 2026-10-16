@@ -2,6 +2,7 @@
 
 import { REPO_URL, SITE_TITLE } from './config.js';
 import { el } from './dom.js';
+import { countDownload, formatCount } from './downloads.js';
 import { icon } from './icons.js';
 import { countDocs, fold } from './text.js';
 
@@ -80,10 +81,36 @@ function docCard(doc, headingTag) {
     icon('download'),
   );
 
+  // Numero di download in basso a destra; manca se il contatore non risponde.
+  const label = (n) => `${formatCount(n)} download`;
+  const counter =
+    typeof doc.downloads === 'number' &&
+    el(
+      'span',
+      { class: 'doc__count', title: label(doc.downloads), 'aria-label': label(doc.downloads) },
+      el('span', { class: 'doc__count-num' }, formatCount(doc.downloads)),
+      icon('arrowDown'),
+    );
+
+  // Aprire la dispensa o scaricarla conta come un download.
+  const onDownload = (event) => {
+    if (event.type === 'auxclick' && event.button !== 1) return;
+    countDownload(doc);
+    if (!counter) return;
+    doc.downloads += 1;
+    counter.firstChild.textContent = formatCount(doc.downloads);
+    counter.title = label(doc.downloads);
+    counter.setAttribute('aria-label', label(doc.downloads));
+  };
+  for (const link of [open, download]) {
+    link.addEventListener('click', onDownload);
+    link.addEventListener('auxclick', onDownload);
+  }
+
   return el(
     'li',
     { class: 'doc', accent: doc.color },
-    el('div', { class: 'doc__tile' }, open, download),
+    el('div', { class: 'doc__tile' }, open, download, counter),
     el(headingTag, { class: 'doc__title' }, doc.title),
     doc.description && el('p', { class: 'doc__desc' }, doc.description),
     doc.author && el('p', { class: 'doc__author' }, `di ${doc.author}`),

@@ -1,0 +1,8 @@
+{
+  "name": "archivio-dispense",
+  "private": true,
+  "description": "Dipendenze della funzione Netlify che conta i download (netlify/functions). Il sito resta HTML, CSS e JS puri.",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.4"
+  }
+}

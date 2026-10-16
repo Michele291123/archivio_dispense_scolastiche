@@ -1,6 +1,14 @@
 # Configurazione per Netlify, usata quando il sito è collegato a un
-# repository Git: a ogni pubblicazione rigenera l'indice delle dispense
-# e poi pubblica l'intera cartella del progetto.
+# repository Git: a ogni pubblicazione rigenera l'indice delle dispense,
+# copia il sito in _site e pubblica quella cartella.
+#
+# Si pubblica _site e non tutta la repo perché ora c'è un package.json:
+# Netlify installa node_modules (serve alla funzione che conta i download)
+# e così non finisce online insieme al sito.
 [build]
-  command = "node strumenti/aggiorna-indice.mjs"
-  publish = "."
+  command = "node strumenti/aggiorna-indice.mjs && rm -rf _site && mkdir _site && cp -r index.html css js assets dispense _site/"
+  publish = "_site"
+
+# Funzioni lato server: netlify/functions/download.mjs risponde su /api/download
+[functions]
+  directory = "netlify/functions"

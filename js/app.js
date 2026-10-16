@@ -9,6 +9,7 @@
 import { loadArchive } from './archive.js';
 import { PASSWORD, SITE_TITLE } from './config.js';
 import { el } from './dom.js';
+import { loadDownloads } from './downloads.js';
 import { initTheme } from './theme.js';
 import { errorView, homeView, lockView, notFoundView, searchView, subjectView, topicView } from './views.js';
 
@@ -114,7 +115,11 @@ const root = document.documentElement;
 
 async function start() {
   try {
-    archive = await loadArchive();
+    // Il contatore dei download si carica insieme all'archivio; se non
+    // risponde le schede compaiono lo stesso, senza numero.
+    const [loaded, downloads] = await Promise.all([loadArchive(), loadDownloads()]);
+    if (downloads) for (const doc of loaded.docs) doc.downloads = Number(downloads[doc.file]) || 0;
+    archive = loaded;
     render();
   } catch (error) {
     console.error('Archivio non caricato', error);

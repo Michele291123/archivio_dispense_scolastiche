@@ -2,7 +2,8 @@
 
 Sito statico per raccogliere dispense scolastiche divise per materia e, dentro
 ogni materia, per argomento.
-HTML, CSS e JavaScript puri, senza dipendenze né build.
+HTML, CSS e JavaScript puri, senza dipendenze né build. L'unica parte lato
+server è la funzione Netlify che conta i download.
 
 ## Struttura
 
@@ -23,6 +24,7 @@ archivio-dispense/
 │   ├── views.js           costruisce le pagine (cartelle, dispense, risultati)
 │   ├── filetypes.js       tipo di file dall'estensione
 │   ├── theme.js           tasto tema scuro/chiaro
+│   ├── downloads.js       legge e aggiorna il contatore dei download
 │   └── dom.js, icons.js, text.js   piccole utilità
 ├── dispense/              i file delle dispense, i loro .yml e indice.json
 │   └── <materia>/<argomento>/      dove finiscono le dispense proposte con una issue
@@ -30,6 +32,9 @@ archivio-dispense/
 ├── strumenti/
 │   ├── aggiorna-indice.mjs         rigenera dispense/indice.json
 │   └── issue-in-pr.mjs             trasforma una issue in una pull request
+├── netlify/functions/
+│   └── download.mjs       contatore dei download (/api/download)
+├── package.json           dipendenza della funzione (@netlify/blobs)
 ├── netlify.toml           a ogni pubblicazione Netlify rigenera l'indice
 └── .github/
     ├── ISSUE_TEMPLATE/    un modulo per materia, per proporre una dispensa
@@ -159,8 +164,24 @@ dai singoli `.yml`. Lo script rigenera l'indice e segnala i file senza `.yml`
 (che compaiono con i dati ricavati dal nome) e i `.yml` senza file.
 
 Il sito è pubblicato su Netlify, che a ogni push sul ramo `main` esegue lo
-script (vedi `netlify.toml`) e ripubblica: su GitHub basta caricare i due file,
+script (vedi `netlify.toml`), copia il sito in `_site` e ripubblica quella
+cartella (così `node_modules` non finisce online): su GitHub basta caricare i due file,
 o accettare una pull request.
+
+## Contatore dei download
+
+Ogni scheda mostra in basso a destra quante volte la dispensa è stata aperta
+o scaricata (numero e freccia). Conta sia il clic sulla scheda sia il tasto di
+download; chi la apre tre volte vale tre.
+
+Il sito manda a `/api/download` solo il percorso del file e la funzione
+`netlify/functions/download.mjs` aumenta il suo numero in Netlify Blobs (un
+unico oggetto JSON, chiave `conteggi` nello store `download`). Accetta solo
+file presenti in `dispense/indice.json`. Niente cookie e nessun dato su chi
+scarica, quindi non serve un banner di consenso.
+
+I numeri si vedono e si azzerano dal pannello di Netlify, alla voce *Blobs*.
+Se una dispensa cambia nome o cartella riparte da zero.
 
 ## Password
 
@@ -182,6 +203,8 @@ python -m http.server 8000
 ```
 
 poi `http://localhost:8000`. Funziona anche con Live Server di VS Code.
+In questo modo il contatore dei download non c'è e le schede compaiono senza
+numero; per provarlo serve `npx netlify dev`.
 
 ## Modificare le materie
 

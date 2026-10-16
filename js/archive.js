@@ -54,6 +54,8 @@ async function loadDoc(entry) {
     subject,
     topic,
     fileName,
+    // Percorso nell'indice: è anche la chiave del contatore dei download
+    file: entry.file,
     url: toUrl(entry.file),
     type: fileType(fileName),
     // Testo su cui lavora la ricerca

@@ -367,6 +367,39 @@ html[data-locked] .state--loading {
   color: var(--text);
 }
 
+.doc__count {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--muted);
+  font: 500 0.68rem/1.5 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  transition: color 0.18s ease;
+}
+
+.doc__count .icon svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.4;
+}
+
+.doc__tile:hover .doc__count,
+.doc__tile:focus-within .doc__count {
+  color: var(--accent);
+}
+
+/* Il riquadro del tipo non deve finire sotto il contatore */
+.doc__tile:has(.doc__count) .doc__kind {
+  max-width: calc(100% - 96px);
+}
+
 /* Senza mouse il tasto di download resta sempre visibile */
 @media (hover: none) {
   .doc__download {
