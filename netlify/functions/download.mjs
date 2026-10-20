@@ -14,6 +14,29 @@ import { getStore } from '@netlify/blobs';
 const KEY = 'conteggi';
 const store = () => getStore({ name: 'download', consistency: 'strong' });
 
+// Dispense spostate: vecchio percorso -> nuovo. Il contatore del vecchio
+// percorso viene sommato a quello del nuovo, così spostare un file non
+// azzera i suoi download. Quando sposti una dispensa aggiungi una riga qui.
+const MOVED = {
+  'dispense/sistemi-e-reti/livello-4-trasporto/livello_applicazione_sistemi_reti.pdf':
+    'dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.pdf',
+};
+
+// Porta i numeri dai vecchi percorsi ai nuovi (anche se un file è stato
+// spostato più volte). Restituisce true se ha cambiato qualcosa.
+function migrate(counts) {
+  let changed = false;
+  for (const from of Object.keys(MOVED)) {
+    if (!(from in counts)) continue;
+    let to = MOVED[from];
+    for (let hops = 0; MOVED[to] && hops < 20; hops++) to = MOVED[to];
+    counts[to] = (Number(counts[to]) || 0) + (Number(counts[from]) || 0);
+    delete counts[from];
+    changed = true;
+  }
+  return changed;
+}
+
 // Accetta solo file che compaiono davvero nell'indice: così nessuno può
 // riempire il contatore di nomi inventati.
 async function isKnownFile(file, origin) {
@@ -37,6 +60,7 @@ async function increment(file) {
   for (let attempt = 0; attempt < 5; attempt++) {
     const current = await blobs.getWithMetadata(KEY, { type: 'json' });
     const counts = (current && current.data) || {};
+    migrate(counts);
     counts[file] = (Number(counts[file]) || 0) + 1;
 
     const condition = current ? { onlyIfMatch: current.etag } : { onlyIfNew: true };
@@ -49,7 +73,14 @@ async function increment(file) {
 
 export default async (req) => {
   if (req.method === 'GET') {
-    const counts = (await store().get(KEY, { type: 'json' })) || {};
+    const blobs = store();
+    const current = await blobs.getWithMetadata(KEY, { type: 'json' });
+    const counts = (current && current.data) || {};
+    // Salva la migrazione una volta sola; se fallisce i numeri restano giusti
+    // comunque, perché si rifà alla lettura successiva.
+    if (migrate(counts) && current) {
+      await blobs.setJSON(KEY, counts, { onlyIfMatch: current.etag }).catch(() => {});
+    }
     return Response.json(counts, { headers: { 'Cache-Control': 'no-cache' } });
   }
 

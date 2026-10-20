@@ -48,6 +48,7 @@ body:
       description: La cartella dentro Sistemi e Reti. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
         - "Livello 4 - Trasporto"
+        - "Livello 7 - Applicazione"
         - "Laboratorio - CiscoPT"
         - "Nuovo argomento"
     validations:
