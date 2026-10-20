@@ -56,6 +56,10 @@
     "file": "dispense/formulario_derivate.jpeg"
   },
   {
+    "info": "dispense/gpoi/economia/mercato_costi_profitto_gpoi.yml",
+    "file": "dispense/gpoi/economia/mercato_costi_profitto_gpoi.pdf"
+  },
+  {
     "info": "dispense/informatica/sql/join_sql.yml",
     "file": "dispense/informatica/sql/join_sql.png"
   },
