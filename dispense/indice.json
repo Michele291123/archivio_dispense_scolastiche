@@ -20,10 +20,6 @@
     "file": "dispense/Db_Pratica_e_SQL.pdf"
   },
   {
-    "info": "dispense/Elementi_di_Economia_GPOI.yml",
-    "file": "dispense/Elementi_di_Economia_GPOI.pdf"
-  },
-  {
     "info": "dispense/Manuale_Cisco_PacketTracer.yml",
     "file": "dispense/Manuale_Cisco_PacketTracer.pdf"
   },
@@ -54,6 +50,10 @@
   {
     "info": "dispense/formulario_derivate.yml",
     "file": "dispense/formulario_derivate.jpeg"
+  },
+  {
+    "info": "dispense/gpoi/economia/Elementi_di_Economia_GPOI.yml",
+    "file": "dispense/gpoi/economia/Elementi_di_Economia_GPOI.pdf"
   },
   {
     "info": "dispense/gpoi/economia/mercato_costi_profitto_gpoi.yml",

@@ -20,6 +20,8 @@ const store = () => getStore({ name: 'download', consistency: 'strong' });
 const MOVED = {
   'dispense/sistemi-e-reti/livello-4-trasporto/livello_applicazione_sistemi_reti.pdf':
     'dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.pdf',
+  'dispense/Elementi_di_Economia_GPOI.pdf':
+    'dispense/gpoi/economia/Elementi_di_Economia_GPOI.pdf',
 };
 
 // Porta i numeri dai vecchi percorsi ai nuovi (anche se un file è stato
