@@ -47,7 +47,9 @@ body:
       label: Argomento
       description: La cartella dentro Matematica. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
-        - "funzioni 2 variabili"
+        - "Derivate"
+        - "Funzioni 2 variabili"
+        - "Geometria analitica"
         - "Nuovo argomento"
     validations:
       required: true

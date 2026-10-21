@@ -9,9 +9,20 @@
 // Un file senza .yml entra comunque nell'indice: il sito ne ricava materia
 // e titolo dal nome.
 
-import { readdir, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, parse, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readForms, slugify } from './issue-in-pr.mjs';
+
+// Valore di un campo del .yml (come js/parser.js, ridotto all'essenziale).
+function field(text, name) {
+  const match = text.match(new RegExp(`^\\s*${name}\\s*:(.*)$`, 'im'));
+  if (!match) return '';
+  const value = match[1].trim();
+  const quote = value[0];
+  if (value.length > 1 && (quote === '"' || quote === "'") && value.endsWith(quote)) return value.slice(1, -1).trim();
+  return value;
+}
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const FOLDER = 'dispense';
@@ -59,6 +70,27 @@ for (const { info, files } of pairs.values()) {
       warnings.push(`${file}: manca il file .yml, uso il nome del file`);
     }
   }
+}
+
+// Ogni argomento usato in un .yml deve stare anche nella tendina del modulo
+// della sua materia, altrimenti chi carica con una issue non lo vede.
+// La dispensa sta di solito in dispense/<materia>/<argomento>/.
+const forms = new Map((await readForms(ROOT)).map((form) => [slugify(form.subject), form]));
+for (const { info, file } of index) {
+  if (!info) continue;
+  const text = await readFile(join(ROOT, info), 'utf8');
+  const materia = field(text, 'materia');
+  const argomento = field(text, 'argomento');
+  if (!argomento) {
+    warnings.push(`${info}: manca l'argomento`);
+    continue;
+  }
+  const form = forms.get(slugify(materia));
+  if (form && !form.topics.some((topic) => slugify(topic) === slugify(argomento))) {
+    warnings.push(`${info}: l'argomento "${argomento}" non è nella tendina di ${form.path}`);
+  }
+  const folder = `${FOLDER}/${slugify(materia)}/${slugify(argomento)}`;
+  if (dirname(file) !== folder) warnings.push(`${file}: di solito starebbe in ${folder}/`);
 }
 
 await writeFile(join(ROOT, INDEX), `${JSON.stringify(index, null, 2)}\n`);

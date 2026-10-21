@@ -161,7 +161,14 @@ c'è nessuna materia, la dispensa va in "Senza materia".
 Una pagina web non può sfogliare una cartella del server, quindi il sito legge
 `dispense/indice.json` per sapere quali dispense esistono; i dati li prende poi
 dai singoli `.yml`. Lo script rigenera l'indice e segnala i file senza `.yml`
-(che compaiono con i dati ricavati dal nome) e i `.yml` senza file.
+(che compaiono con i dati ricavati dal nome), i `.yml` senza file, le dispense
+senza argomento, gli argomenti che non sono nella tendina del modulo della
+materia e i file che non stanno in `dispense/<materia>/<argomento>/`.
+Sono solo avvisi: il sito funziona lo stesso, ma conviene sistemarli.
+
+Se sposti o rinomini una dispensa già pubblicata, aggiungi la riga
+`vecchio percorso -> nuovo` in `MOVED` dentro `netlify/functions/download.mjs`,
+così il contatore dei download non riparte da zero.
 
 Il sito è pubblicato su Netlify, che a ogni push sul ramo `main` esegue lo
 script (vedi `netlify.toml`), copia il sito in `_site` e ripubblica quella

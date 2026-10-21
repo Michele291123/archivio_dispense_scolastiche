@@ -1,63 +1,39 @@
 [
   {
-    "info": "dispense/1.1-machine-learning.yml",
-    "file": "dispense/1.1-machine-learning.pdf"
-  },
-  {
-    "info": "dispense/Appunti_MachineLearning_IA.yml",
-    "file": "dispense/Appunti_MachineLearning_IA.pdf"
-  },
-  {
-    "info": "dispense/Baudelaire_e_Scapigliatura.yml",
-    "file": "dispense/Baudelaire_e_Scapigliatura.pdf"
-  },
-  {
-    "info": "dispense/Database_Completa.yml",
-    "file": "dispense/Database_Completa.pdf"
-  },
-  {
-    "info": "dispense/Db_Pratica_e_SQL.yml",
-    "file": "dispense/Db_Pratica_e_SQL.pdf"
-  },
-  {
-    "info": "dispense/Manuale_Cisco_PacketTracer.yml",
-    "file": "dispense/Manuale_Cisco_PacketTracer.pdf"
-  },
-  {
-    "info": "dispense/Rivoluzione Americana Storia.yml",
-    "file": "dispense/Rivoluzione Americana Storia.pdf"
-  },
-  {
-    "info": "dispense/Servizi_Laboratorio.yml",
-    "file": "dispense/Servizi_Laboratorio.pdf"
-  },
-  {
-    "info": "dispense/appunti_db_teoria_informatica.yml",
-    "file": "dispense/appunti_db_teoria_informatica.pdf"
-  },
-  {
-    "info": "dispense/claude-assets/dispense-studio.yml",
-    "file": "dispense/claude-assets/dispense-studio.skill"
-  },
-  {
-    "info": "dispense/curve_geometria_analitica.yml",
-    "file": "dispense/curve_geometria_analitica.PNG"
-  },
-  {
-    "info": "dispense/dispensa_storia_seconda_rivoluzione_industriale.yml",
-    "file": "dispense/dispensa_storia_seconda_rivoluzione_industriale.pdf"
-  },
-  {
-    "info": "dispense/formulario_derivate.yml",
-    "file": "dispense/formulario_derivate.jpeg"
+    "info": "dispense/claude-assets/skill/dispense-studio.yml",
+    "file": "dispense/claude-assets/skill/dispense-studio.skill"
   },
   {
     "info": "dispense/gpoi/economia/Elementi_di_Economia_GPOI.yml",
     "file": "dispense/gpoi/economia/Elementi_di_Economia_GPOI.pdf"
   },
   {
+    "info": "dispense/gpoi/economia/eserciziario_economia_gpoi.yml",
+    "file": "dispense/gpoi/economia/eserciziario_economia_gpoi.pdf"
+  },
+  {
     "info": "dispense/gpoi/economia/mercato_costi_profitto_gpoi.yml",
     "file": "dispense/gpoi/economia/mercato_costi_profitto_gpoi.pdf"
+  },
+  {
+    "info": "dispense/ia/machine-learning/1.1-machine-learning.yml",
+    "file": "dispense/ia/machine-learning/1.1-machine-learning.pdf"
+  },
+  {
+    "info": "dispense/ia/machine-learning/Appunti_MachineLearning_IA.yml",
+    "file": "dispense/ia/machine-learning/Appunti_MachineLearning_IA.pdf"
+  },
+  {
+    "info": "dispense/informatica/db/Database_Completa.yml",
+    "file": "dispense/informatica/db/Database_Completa.pdf"
+  },
+  {
+    "info": "dispense/informatica/db/Db_Pratica_e_SQL.yml",
+    "file": "dispense/informatica/db/Db_Pratica_e_SQL.pdf"
+  },
+  {
+    "info": "dispense/informatica/db/appunti_db_teoria_informatica.yml",
+    "file": "dispense/informatica/db/appunti_db_teoria_informatica.pdf"
   },
   {
     "info": "dispense/informatica/sql/join_sql.yml",
@@ -72,6 +48,14 @@
     "file": "dispense/inglese/job/cv_cover_letter_interviews_studio.pdf"
   },
   {
+    "info": "dispense/italiano/secondo-ottocento/Baudelaire_e_Scapigliatura.yml",
+    "file": "dispense/italiano/secondo-ottocento/Baudelaire_e_Scapigliatura.pdf"
+  },
+  {
+    "info": "dispense/matematica/derivate/formulario_derivate.yml",
+    "file": "dispense/matematica/derivate/formulario_derivate.jpeg"
+  },
+  {
     "info": "dispense/matematica/funzioni-2-variabili/funzioni_in_2_variabili.yml",
     "file": "dispense/matematica/funzioni-2-variabili/funzioni_in_2_variabili.pdf"
   },
@@ -80,12 +64,16 @@
     "file": "dispense/matematica/funzioni-2-variabili/funzioni_in_due_variabili_matematica.pdf"
   },
   {
-    "info": "dispense/napoleone_storia.yml",
-    "file": "dispense/napoleone_storia.pdf"
+    "info": "dispense/matematica/geometria-analitica/curve_geometria_analitica.yml",
+    "file": "dispense/matematica/geometria-analitica/curve_geometria_analitica.PNG"
   },
   {
-    "info": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.yml",
-    "file": "dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf"
+    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.yml",
+    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.pdf"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/Servizi_Laboratorio.yml",
+    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/Servizi_Laboratorio.pdf"
   },
   {
     "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/esempi_posta_dns_ftp.yml",
@@ -104,12 +92,28 @@
     "file": "dispense/sistemi-e-reti/livello-4-trasporto/livello_trasporto.pdf"
   },
   {
-    "info": "dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi e reti.yml",
-    "file": "dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi e reti.pdf"
+    "info": "dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi_e_reti.yml",
+    "file": "dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi_e_reti.pdf"
   },
   {
     "info": "dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.yml",
     "file": "dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.pdf"
+  },
+  {
+    "info": "dispense/storia/quarto-anno/Rivoluzione_Americana_Storia.yml",
+    "file": "dispense/storia/quarto-anno/Rivoluzione_Americana_Storia.pdf"
+  },
+  {
+    "info": "dispense/storia/quarto-anno/napoleone_storia.yml",
+    "file": "dispense/storia/quarto-anno/napoleone_storia.pdf"
+  },
+  {
+    "info": "dispense/storia/quarto-anno/restaurazione_santaAlleanza_motiRivoluzionari_storia.yml",
+    "file": "dispense/storia/quarto-anno/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf"
+  },
+  {
+    "info": "dispense/storia/quinto-anno/dispensa_storia_seconda_rivoluzione_industriale.yml",
+    "file": "dispense/storia/quinto-anno/dispensa_storia_seconda_rivoluzione_industriale.pdf"
   },
   {
     "info": "dispense/tpsit/concorrenza/concorrenza.yml",

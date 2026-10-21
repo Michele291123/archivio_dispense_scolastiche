@@ -22,6 +22,38 @@ const MOVED = {
     'dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.pdf',
   'dispense/Elementi_di_Economia_GPOI.pdf':
     'dispense/gpoi/economia/Elementi_di_Economia_GPOI.pdf',
+  'dispense/1.1-machine-learning.pdf':
+    'dispense/ia/machine-learning/1.1-machine-learning.pdf',
+  'dispense/Appunti_MachineLearning_IA.pdf':
+    'dispense/ia/machine-learning/Appunti_MachineLearning_IA.pdf',
+  'dispense/Baudelaire_e_Scapigliatura.pdf':
+    'dispense/italiano/secondo-ottocento/Baudelaire_e_Scapigliatura.pdf',
+  'dispense/Database_Completa.pdf':
+    'dispense/informatica/db/Database_Completa.pdf',
+  'dispense/Db_Pratica_e_SQL.pdf':
+    'dispense/informatica/db/Db_Pratica_e_SQL.pdf',
+  'dispense/appunti_db_teoria_informatica.pdf':
+    'dispense/informatica/db/appunti_db_teoria_informatica.pdf',
+  'dispense/Manuale_Cisco_PacketTracer.pdf':
+    'dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.pdf',
+  'dispense/Servizi_Laboratorio.pdf':
+    'dispense/sistemi-e-reti/laboratorio-ciscopt/Servizi_Laboratorio.pdf',
+  'dispense/Rivoluzione Americana Storia.pdf':
+    'dispense/storia/quarto-anno/Rivoluzione_Americana_Storia.pdf',
+  'dispense/napoleone_storia.pdf':
+    'dispense/storia/quarto-anno/napoleone_storia.pdf',
+  'dispense/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf':
+    'dispense/storia/quarto-anno/restaurazione_santaAlleanza_motiRivoluzionari_storia.pdf',
+  'dispense/dispensa_storia_seconda_rivoluzione_industriale.pdf':
+    'dispense/storia/quinto-anno/dispensa_storia_seconda_rivoluzione_industriale.pdf',
+  'dispense/curve_geometria_analitica.PNG':
+    'dispense/matematica/geometria-analitica/curve_geometria_analitica.PNG',
+  'dispense/formulario_derivate.jpeg':
+    'dispense/matematica/derivate/formulario_derivate.jpeg',
+  'dispense/claude-assets/dispense-studio.skill':
+    'dispense/claude-assets/skill/dispense-studio.skill',
+  'dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi e reti.pdf':
+    'dispense/sistemi-e-reti/livello-4-trasporto/riassuntozzo_livello4_sistemi_e_reti.pdf',
 };
 
 // Porta i numeri dai vecchi percorsi ai nuovi (anche se un file è stato

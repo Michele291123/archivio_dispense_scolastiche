@@ -48,6 +48,7 @@ body:
       label: Argomento
       description: La cartella dentro IA. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
+        - "Machine Learning"
         - "Nuovo argomento"
     validations:
       required: true
