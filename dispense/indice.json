@@ -36,6 +36,10 @@
     "file": "dispense/informatica/db/appunti_db_teoria_informatica.pdf"
   },
   {
+    "info": "dispense/informatica/sql/comandi_sql.yml",
+    "file": "dispense/informatica/sql/comandi_sql.png"
+  },
+  {
     "info": "dispense/informatica/sql/join_sql.yml",
     "file": "dispense/informatica/sql/join_sql.png"
   },
@@ -50,6 +54,14 @@
   {
     "info": "dispense/italiano/secondo-ottocento/Baudelaire_e_Scapigliatura.yml",
     "file": "dispense/italiano/secondo-ottocento/Baudelaire_e_Scapigliatura.pdf"
+  },
+  {
+    "info": "dispense/italiano/secondo-ottocento/copia_di_dall_italia_unita_alla_scapigliatura_riassunto_completo.yml",
+    "file": "dispense/italiano/secondo-ottocento/copia_di_dall_italia_unita_alla_scapigliatura_riassunto_completo.pdf"
+  },
+  {
+    "info": "dispense/italiano/secondo-ottocento/la_storia_del_romanzo_italiano.yml",
+    "file": "dispense/italiano/secondo-ottocento/la_storia_del_romanzo_italiano.pdf"
   },
   {
     "info": "dispense/matematica/derivate/formulario_derivate.yml",
