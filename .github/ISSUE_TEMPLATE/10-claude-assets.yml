@@ -1,0 +1,71 @@
+# Modulo per proporre un contenuto di Claude Assets (skill, guide, strumenti
+# per Claude Code).
+# L'action (strumenti/issue-in-pr.mjs) legge da qui la materia e gli argomenti
+# e aggiunge da sola i nuovi argomenti alla tendina: non cambiare gli id, le
+# etichette (label) e la forma delle voci sotto "options".
+name: Claude Assets
+description: Proponi una skill, una guida o uno strumento per Claude Code
+title: "[Claude Assets] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Compila i campi e carica il file. Dopo l'invio viene preparata in automatico una pull request: un collaboratore la controlla e, se va bene, il contenuto compare nell'archivio.
+  - type: dropdown
+    id: materia
+    attributes:
+      label: Materia
+      description: È già quella giusta, lasciala così. Per un'altra materia usa il suo modulo.
+      options:
+        - "Claude Assets"
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: titolo
+    attributes:
+      label: Titolo
+      description: Il nome con cui il contenuto compare nell'archivio.
+    validations:
+      required: true
+  - type: textarea
+    id: descrizione
+    attributes:
+      label: Descrizione
+      description: Facoltativa. Una o due frasi su cosa fa e, se serve, come si installa.
+    validations:
+      required: false
+  - type: input
+    id: autore
+    attributes:
+      label: Autore
+      description: Chi l'ha scritto.
+    validations:
+      required: true
+  - type: dropdown
+    id: argomento
+    attributes:
+      label: Argomento
+      description: La cartella dentro Claude Assets. Se non c'è quella che ti serve scegli "Nuovo argomento".
+      options:
+        - "Guide"
+        - "Skill"
+        - "Statusline"
+        - "Nuovo argomento"
+    validations:
+      required: true
+  - type: input
+    id: nuovo-argomento
+    attributes:
+      label: Nuovo argomento
+      description: Da compilare solo se sopra hai scelto "Nuovo argomento". Un nome breve, per esempio Agenti, Hook o Comandi.
+    validations:
+      required: false
+  - type: upload
+    id: file
+    attributes:
+      label: File
+      description: Un solo file. Skill, script e cartelle vanno caricati come zip (anche i file .skill). Formati ammessi - pdf, immagini, Word, Excel, PowerPoint, OpenDocument, txt, zip.
+    validations:
+      required: true
+      accept: ".pdf,.png,.jpg,.jpeg,.gif,.webp,.doc,.docx,.xls,.xlsx,.pptx,.odt,.ods,.odp,.txt,.zip"
