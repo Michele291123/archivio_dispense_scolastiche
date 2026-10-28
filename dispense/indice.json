@@ -52,6 +52,10 @@
     "file": "dispense/informatica/db/appunti_db_teoria_informatica.pdf"
   },
   {
+    "info": "dispense/informatica/db/progettazione_logica_normalizzazione_sql_informatica.yml",
+    "file": "dispense/informatica/db/progettazione_logica_normalizzazione_sql_informatica.pdf"
+  },
+  {
     "info": "dispense/informatica/sql/comandi_sql.yml",
     "file": "dispense/informatica/sql/comandi_sql.png"
   },
