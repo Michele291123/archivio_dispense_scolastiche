@@ -8,6 +8,14 @@
     "file": "dispense/claude-assets/skill/dispense-studio.skill"
   },
   {
+    "info": "dispense/claude-assets/skill/risparmi-token/risparmi-token-guida.yml",
+    "file": "dispense/claude-assets/skill/risparmi-token/risparmi-token-guida.pdf"
+  },
+  {
+    "info": "dispense/claude-assets/skill/risparmi-token/risparmi-token.yml",
+    "file": "dispense/claude-assets/skill/risparmi-token/risparmi-token.zip"
+  },
+  {
     "info": "dispense/claude-assets/statusline/statusline-claude.yml",
     "file": "dispense/claude-assets/statusline/statusline-claude.zip"
   },

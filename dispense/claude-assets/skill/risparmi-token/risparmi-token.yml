@@ -1,0 +1,5 @@
+titolo: Risparmi Token
+descrizione: Skill per Claude Code che riduce il consumo di token. Fa rispondere in modo compresso (caveman), scrivere solo il codice minimo (ponytail) e dividere il lavoro tra modelli (Opus pianifica e rivede, Sonnet implementa, Haiku fa il lavoro meccanico). Nello zip ci sono skill, agenti, il pezzo da aggiungere a CLAUDE.md e install.ps1 per installarla su Windows.
+autore: Michele A.
+materia: Claude Assets
+argomento: "Skill"
