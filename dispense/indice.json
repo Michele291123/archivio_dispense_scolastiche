@@ -1,5 +1,9 @@
 [
   {
+    "info": "dispense/claude-assets/guide/Guida-1-Claude-Code-da-zero.yml",
+    "file": "dispense/claude-assets/guide/Guida-1-Claude-Code-da-zero.pdf"
+  },
+  {
     "info": "dispense/claude-assets/skill/dispense-studio.yml",
     "file": "dispense/claude-assets/skill/dispense-studio.skill"
   },
