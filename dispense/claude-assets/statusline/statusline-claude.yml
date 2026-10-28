@@ -1,0 +1,5 @@
+titolo: Status line per Claude Code
+descrizione: Script per la barra di stato di Claude Code che mostra modello, contesto usato, limite della sessione di 5 ore e limite settimanale, con barre colorate e tempo al reset. Nello zip ci sono lo script e il LEGGIMI con le istruzioni per installarlo (serve Node.js).
+autore: Michele A.
+materia: Claude Assets
+argomento: "Statusline"

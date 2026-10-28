@@ -4,6 +4,10 @@
     "file": "dispense/claude-assets/skill/dispense-studio.skill"
   },
   {
+    "info": "dispense/claude-assets/statusline/statusline-claude.yml",
+    "file": "dispense/claude-assets/statusline/statusline-claude.zip"
+  },
+  {
     "info": "dispense/gpoi/economia/Elementi_di_Economia_GPOI.yml",
     "file": "dispense/gpoi/economia/Elementi_di_Economia_GPOI.pdf"
   },
@@ -126,6 +130,10 @@
   {
     "info": "dispense/storia/quinto-anno/dispensa_storia_seconda_rivoluzione_industriale.yml",
     "file": "dispense/storia/quinto-anno/dispensa_storia_seconda_rivoluzione_industriale.pdf"
+  },
+  {
+    "info": "dispense/storia/quinto-anno/storia_imperialismo_seconda_rivoluzione_industriale_italia.yml",
+    "file": "dispense/storia/quinto-anno/storia_imperialismo_seconda_rivoluzione_industriale_italia.pdf"
   },
   {
     "info": "dispense/tpsit/concorrenza/concorrenza.yml",
