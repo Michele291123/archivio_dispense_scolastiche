@@ -49,6 +49,7 @@ body:
       options:
         - "DB"
         - "SQL"
+        - "Esercizi"
         - "Nuovo argomento"
     validations:
       required: true

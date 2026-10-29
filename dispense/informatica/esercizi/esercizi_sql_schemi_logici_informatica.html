@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL e schemi logici</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una colonna di schede esercizio, divisa in due parti (SQL su Chinook, ER → schema logico); ogni scheda ha tre pannelli nascosti con bordo colorato per ruolo. */
+:root {
+  --bg: #0e0e0e;
+  --surface: #151413;
+  --surface-2: #1c1a18;
+  --fg: #f1ebe0;
+  --muted: #a39b8f;
+  --line: #2d2a26;
+  --hint: #e2a73c;
+  --sol: #74c27a;
+  --exp: #72a9e0;
+  --kw: #e6b858;
+  --str: #a5d38f;
+  --num: #e09a6f;
+  --font-display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --font-body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+.wrap { max-width: 860px; margin: 0 auto; }
+header.top { padding-block: 48px 28px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(44px, 9vw, 76px); line-height: .92; margin: 10px 0 16px; text-transform: uppercase; text-wrap: balance; letter-spacing: .005em; }
+.lead { color: var(--muted); max-width: 62ch; margin: 0; }
+nav.jump { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+nav.jump a { font-family: var(--font-mono); font-size: 13px; color: var(--fg); text-decoration: none; border: 1px solid var(--line); border-left: 3px solid var(--hint); padding: 7px 12px; }
+nav.jump a.er { border-left-color: var(--exp); }
+nav.jump a:hover, nav.jump a:focus-visible { background: var(--surface-2); outline: none; }
+
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 26px; }
+.legend div { min-width: 0; font-size: 14px; color: var(--muted); }
+.legend b { color: var(--fg); font-weight: 600; }
+.key { font-family: var(--font-mono); font-size: 13px; color: var(--fg); }
+
+section.part { margin-top: 56px; }
+h2 { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 6vw, 46px); line-height: 1; text-transform: uppercase; margin: 0 0 8px; text-wrap: balance; }
+.part-note { color: var(--muted); margin: 0 0 8px; max-width: 64ch; font-size: 15px; }
+h3.level { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 38px 0 12px; display: flex; align-items: center; gap: 12px; }
+h3.level::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+.list { display: flex; flex-direction: column; gap: 14px; }
+article.ex { background: var(--surface); border: 1px solid var(--line); padding: 18px 20px 18px; min-width: 0; }
+.ex-head { display: flex; gap: 14px; align-items: baseline; }
+.ex-num { font-family: var(--font-display); font-weight: 900; font-size: 30px; line-height: 1; color: var(--muted); min-width: 1.6em; font-variant-numeric: tabular-nums; }
+.ex-text { margin: 0; min-width: 0; }
+.ex-text code, .panel code { font-family: var(--font-mono); font-size: .88em; background: var(--surface-2); padding: 1px 5px; border: 1px solid var(--line); }
+h4.ex-title { font-family: var(--font-display); font-weight: 900; font-size: 26px; text-transform: uppercase; margin: 0 0 4px; line-height: 1.05; }
+
+.btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-left: calc(1.6em * 30 / 16 + 14px); }
+.btns button {
+  font-family: var(--font-mono); font-size: 13px; color: var(--fg); background: transparent;
+  border: 1px solid var(--line); border-left: 3px solid var(--c); padding: 7px 12px; cursor: pointer;
+}
+.btns button:hover { background: var(--surface-2); }
+.btns button:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.btns button[aria-expanded="true"] { background: var(--surface-2); border-color: var(--c); }
+.b-hint { --c: var(--hint); } .b-sol { --c: var(--sol); } .b-exp { --c: var(--exp); }
+
+.panels { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; padding-left: calc(1.6em * 30 / 16 + 14px); }
+.panel { border-left: 3px solid var(--c); background: var(--surface-2); padding: 12px 14px; min-width: 0; font-size: 15px; }
+.panel .tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--c); display: block; margin-bottom: 6px; }
+.panel p { margin: 0 0 8px; } .panel p:last-child { margin-bottom: 0; }
+.p-hint { --c: var(--hint); } .p-sol { --c: var(--sol); } .p-exp { --c: var(--exp); }
+pre.code { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6; margin: 0; overflow-x: auto; white-space: pre; padding: 2px 0; }
+.kw { color: var(--kw); } .str { color: var(--str); } .num { color: var(--num); }
+.schema { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.75; overflow-x: auto; white-space: nowrap; }
+.schema .pk { text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+.schema i { font-style: italic; color: var(--fg); }
+.schema .t { font-weight: 600; }
+.result { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+
+.diagram { overflow-x: auto; margin: 14px 0 0; border: 1px solid var(--line); background: var(--bg); }
+.diagram svg { display: block; width: 100%; min-width: 600px; height: auto; }
+.er-line { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+.er-ent rect { fill: var(--surface-2); stroke: var(--fg); stroke-width: 1.5; }
+.er-ent text { fill: var(--fg); font-family: var(--font-mono); font-weight: 600; font-size: 13px; }
+.er-ass polygon { fill: var(--bg); stroke: var(--exp); stroke-width: 1.5; }
+.er-ass text { fill: var(--exp); font-family: var(--font-mono); font-weight: 600; font-size: 11px; }
+.er-attr circle { fill: var(--bg); stroke: var(--fg); stroke-width: 1.3; }
+.er-attr circle.id { fill: var(--fg); }
+.er-attr text, .er-note { fill: var(--muted); font-family: var(--font-mono); font-size: 11.5px; }
+.er-card { fill: var(--hint); font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.er-role { fill: var(--muted); font-family: var(--font-mono); font-size: 11px; font-style: italic; }
+
+footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
+
+@media (max-width: 560px) {
+  .btns, .panels { padding-left: 0; }
+  article.ex { padding: 16px 14px; }
+  .ex-num { font-size: 26px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .panel:not([hidden]) { animation: open .18s ease-out; }
+  @keyframes open { from { opacity: .3; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Informatica · Database · Classe quinta</div>
+    <h1>SQL e schemi logici</h1>
+    <p class="lead">Venti query sul database Chinook, dalla SELECT con WHERE ai JOIN tripli con GROUP BY, e cinque schemi ER da tradurre in schema logico compatto. Per ogni esercizio puoi chiedere un indizio, vedere la soluzione e leggerne la spiegazione.</p>
+    <nav class="jump" aria-label="Sezioni">
+      <a href="#query">Parte 1 · Query Chinook</a>
+      <a href="#er" class="er">Parte 2 · Da ER a schema logico</a>
+    </nav>
+    <div class="legend">
+      <div><b>Schema logico.</b> Come nella dispensa: <span class="key"><span style="text-decoration:underline;text-underline-offset:3px;font-weight:600">chiave primaria</span></span> sottolineata, <span class="key"><i>chiave esterna</i> (FK)</span> in corsivo.</div>
+      <div><b>Schema ER.</b> Pallino pieno = identificatore. Le cardinalità (min,max) sono scritte vicino all'entità a cui si riferiscono.</div>
+      <div><b>Chinook.</b> Le soluzioni sono per MySQL/MariaDB e sono state provate sul database. I conteggi indicati vengono dalla versione con le date 2021–2025.</div>
+    </div>
+  </header>
+
+  <section class="part" id="query">
+    <h2>Parte 1 · Query Chinook</h2>
+    <p class="part-note">Tabelle in minuscolo come nel tuo db (<code style="font-family:var(--font-mono);font-size:.9em">customer</code>, <code style="font-family:var(--font-mono);font-size:.9em">invoice</code>, <code style="font-family:var(--font-mono);font-size:.9em">invoiceline</code>…), colonne in PascalCase.</p>
+    <div id="sql-list"></div>
+  </section>
+
+  <section class="part" id="er">
+    <h2>Parte 2 · Da ER a schema logico</h2>
+    <p class="part-note">Per ogni schema ER scrivi lo schema logico in forma compatta: <code style="font-family:var(--font-mono);font-size:.9em">TABELLA(attributi)</code>, con PK e FK segnate. Gli esercizi riprendono i casi della dispensa: FK sul lato (1,1), molti a molti, partecipazione facoltativa, associazioni parallele e ricorsive, identificatore esterno.</p>
+    <div id="er-list" class="list" style="margin-top:22px"></div>
+  </section>
+
+  <footer>Basato sulla dispensa «Progettazione logica, normalizzazione e SQL» · Michele A.</footer>
+</div>
+
+<script>
+/* ---------- dati: query ---------- */
+const SQL = [
+ {lvl:"Livello 1 · SELECT e WHERE"},
+ {q:"Mostra nome, cognome ed email di tutti i clienti che vivono in Brasile.",
+  h:"Il paese sta nella colonna <code>Country</code> della tabella <code>customer</code>, scritto in inglese.",
+  s:"SELECT FirstName, LastName, Email\nFROM customer\nWHERE Country = 'Brazil';",
+  r:"5 righe",
+  e:"<p>Il <code>WHERE</code> tiene solo le righe che rispettano la condizione. Un valore di testo va tra apici e deve essere scritto come nel database, quindi <code>'Brazil'</code> e non <code>'Brasile'</code>.</p>"},
+ {q:"Mostra nome e prezzo di tutti i brani che costano più di 0,99.",
+  h:"Il prezzo è la colonna <code>UnitPrice</code> della tabella <code>track</code>. Nei numeri decimali SQL usa il punto, non la virgola.",
+  s:"SELECT Name, UnitPrice\nFROM track\nWHERE UnitPrice > 0.99;",
+  r:"213 righe (tutte a 1.99)",
+  e:"<p>In Chinook i brani audio costano 0.99 e i video 1.99, quindi questa query restituisce in pratica i video (episodi di serie TV e simili). Se scrivessi <code>0,99</code> MySQL leggerebbe due valori separati da una virgola e darebbe errore.</p>"},
+ {q:"Mostra i brani che durano più di 5 minuti, con nome e durata espressa in <b>minuti</b>. La colonna della durata è in millisecondi.",
+  h:"5 minuti sono 5 × 60 × 1000 = 300000 millisecondi. Per mostrare i minuti puoi fare un calcolo direttamente nella <code>SELECT</code> e dargli un alias.",
+  s:"SELECT Name, Milliseconds / 60000 AS minuti\nFROM track\nWHERE Milliseconds > 300000;",
+  r:"1069 righe",
+  e:"<p>Nella <code>SELECT</code> puoi scrivere espressioni oltre ai nomi di colonna. <code>Milliseconds / 60000</code> converte in minuti, e <code>AS minuti</code> dà un nome alla colonna calcolata. Per arrotondare puoi scrivere <code>ROUND(Milliseconds / 60000, 2)</code>.</p><p>Nel <code>WHERE</code> non puoi scrivere <code>minuti &gt; 5</code>: come nell'errore di prima, il <code>WHERE</code> viene eseguito prima della <code>SELECT</code> e l'alias non esiste ancora. Per questo il confronto si fa sui millisecondi.</p>"},
+ {q:"Mostra nome, cognome e azienda dei clienti che hanno un'azienda indicata (cioè con <code>Company</code> non vuoto).",
+  h:"Quando l'azienda manca, la colonna vale <code>NULL</code>. Il confronto con <code>NULL</code> non si fa con <code>=</code> o <code>!=</code>.",
+  s:"SELECT FirstName, LastName, Company\nFROM customer\nWHERE Company IS NOT NULL;",
+  r:"10 righe",
+  e:"<p><code>NULL</code> significa «valore sconosciuto», quindi qualsiasi confronto con <code>=</code> o <code>!=</code> dà «sconosciuto» e la riga viene scartata. <code>WHERE Company != NULL</code> non restituisce nessuna riga. Per controllare se un valore manca si usano <code>IS NULL</code> e <code>IS NOT NULL</code>.</p>"},
+ {q:"Mostra le fatture del 2010 con totale maggiore o uguale a 10, ordinate dal totale più alto al più basso. Se il tuo db ha date in anni diversi, usa il primo anno presente.",
+  h:"La funzione <code>YEAR()</code> estrae l'anno da una data. Ti servono due condizioni unite con <code>AND</code>, poi <code>ORDER BY</code> con <code>DESC</code>.",
+  s:"SELECT InvoiceId, InvoiceDate, Total\nFROM invoice\nWHERE YEAR(InvoiceDate) = 2010 AND Total >= 10\nORDER BY Total DESC;",
+  r:"Nella versione 2021–2025, con YEAR(InvoiceDate) = 2021: 12 righe",
+  e:"<p>Con <code>AND</code> una riga passa solo se entrambe le condizioni sono vere. <code>DESC</code> inverte l'ordine, che di default è crescente (<code>ASC</code>).</p><p>Si può fare anche senza funzione, confrontando direttamente le date: <code>InvoiceDate &gt;= '2010-01-01' AND InvoiceDate &lt; '2011-01-01'</code>. Su tabelle grandi questa forma è più veloce, perché il DBMS può usare un indice sulla colonna.</p>"},
+ {q:"Mostra tutti i brani il cui nome contiene la parola «love», in qualsiasi posizione.",
+  h:"Si usa <code>LIKE</code> con il carattere jolly <code>%</code>, sia prima sia dopo la parola.",
+  s:"SELECT Name\nFROM track\nWHERE Name LIKE '%love%';",
+  r:"114 righe",
+  e:"<p><code>%</code> sta per qualsiasi sequenza di caratteri, anche vuota: <code>'%love%'</code> trova «love» all'inizio, in mezzo o alla fine. Con la collation predefinita di MariaDB il confronto non distingue maiuscole e minuscole, quindi prende anche «Love».</p><p>Il filtro lavora sui caratteri, non sulle parole: escono anche titoli come «Loverman» o «Rollover D.J.».</p>"},
+ {q:"Mostra i clienti di Italia, Francia e Germania usando <code>IN</code>, ordinati per paese e poi per cognome.",
+  h:"<code>WHERE Country IN ('…', '…', '…')</code>, e un <code>ORDER BY</code> con due colonne separate da virgola.",
+  s:"SELECT FirstName, LastName, Country\nFROM customer\nWHERE Country IN ('Italy', 'France', 'Germany')\nORDER BY Country, LastName;",
+  r:"10 righe",
+  e:"<p><code>IN</code> equivale a tre condizioni unite con <code>OR</code>. Con <code>ORDER BY Country, LastName</code> il DBMS ordina prima per paese e, tra i clienti dello stesso paese, per cognome.</p>"},
+
+ {lvl:"Livello 2 · Funzioni di aggregazione"},
+ {q:"Conta quanti brani ci sono in totale e calcola la loro durata media in minuti.",
+  h:"Due funzioni di aggregazione nella stessa <code>SELECT</code>: <code>COUNT</code> e <code>AVG</code>. Senza <code>GROUP BY</code> lavorano su tutta la tabella.",
+  s:"SELECT COUNT(*) AS numBrani,\n       AVG(Milliseconds) / 60000 AS durataMediaMin\nFROM track;",
+  r:"1 riga: 3503 brani, circa 6,56 minuti",
+  e:"<p>Senza <code>GROUP BY</code> tutta la tabella è un unico gruppo, quindi il risultato è una sola riga. Puoi dividere dopo la media o dentro: <code>AVG(Milliseconds / 60000)</code> dà lo stesso valore.</p>"},
+ {q:"Mostra quanti clienti ci sono per ogni paese, dal paese con più clienti a quello con meno.",
+  h:"<code>GROUP BY Country</code> con <code>COUNT(*)</code>. Nell'<code>ORDER BY</code> puoi usare l'alias del conteggio.",
+  s:"SELECT Country, COUNT(*) AS numClienti\nFROM customer\nGROUP BY Country\nORDER BY numClienti DESC;",
+  r:"24 righe, prima USA con 13",
+  e:"<p>Il <code>GROUP BY</code> crea un gruppo per ogni paese e <code>COUNT(*)</code> conta le righe di ciascun gruppo. Qui l'alias funziona perché l'<code>ORDER BY</code> viene eseguito dopo la <code>SELECT</code>.</p>"},
+ {q:"Mostra solo i paesi che hanno più di 5 clienti.",
+  h:"Il filtro riguarda un conteggio, che esiste solo dopo il raggruppamento. Quindi non va nel <code>WHERE</code>.",
+  s:"SELECT Country, COUNT(*) AS numClienti\nFROM customer\nGROUP BY Country\nHAVING COUNT(*) > 5;",
+  r:"2 righe: USA (13) e Canada (8)",
+  e:"<p><code>WHERE</code> filtra le singole righe prima del <code>GROUP BY</code>, <code>HAVING</code> filtra i gruppi dopo. <code>WHERE COUNT(*) &gt; 5</code> dà errore, perché in quel momento i gruppi non sono ancora stati formati.</p><p>Francia e Brasile, con esattamente 5 clienti, restano fuori: la condizione è «più di 5».</p>"},
+
+ {lvl:"Livello 3 · JOIN semplici"},
+ {q:"Mostra il titolo di ogni album insieme al nome del suo artista.",
+  h:"La tabella <code>album</code> ha la colonna <code>ArtistId</code>, che è una FK verso <code>artist</code>.",
+  s:"SELECT al.Title, ar.Name\nFROM album al\nJOIN artist ar ON al.ArtistId = ar.ArtistId;",
+  r:"347 righe, una per album",
+  e:"<p>Il <code>JOIN</code> affianca a ogni album la riga dell'artista con lo stesso <code>ArtistId</code>. È la traduzione al contrario di quello che fai nella Parte 2: la FK sul lato (1,1) (l'album) punta alla PK dell'altra tabella.</p>"},
+ {q:"Mostra nome del brano e nome del genere, solo per i brani di genere Rock.",
+  h:"Unisci <code>track</code> e <code>genre</code> su <code>GenreId</code>, poi filtra sul nome del genere e non sul suo id.",
+  s:"SELECT t.Name AS brano, g.Name AS genere\nFROM track t\nJOIN genre g ON t.GenreId = g.GenreId\nWHERE g.Name = 'Rock';",
+  r:"1297 righe",
+  e:"<p>Dopo il <code>JOIN</code> il <code>WHERE</code> può usare colonne di entrambe le tabelle. Le due tabelle hanno una colonna <code>Name</code> ciascuna, quindi devi qualificarle (<code>t.Name</code>, <code>g.Name</code>) e conviene dare alias diversi, altrimenti nel risultato hai due colonne con lo stesso nome.</p>"},
+ {q:"Per ogni fattura dei clienti canadesi mostra id fattura, data, totale, nome e cognome del cliente.",
+  h:"Ogni fattura ha un <code>CustomerId</code>: unisci <code>invoice</code> e <code>customer</code> e filtra sul paese del cliente.",
+  s:"SELECT i.InvoiceId, i.InvoiceDate, i.Total, c.FirstName, c.LastName\nFROM invoice i\nJOIN customer c ON i.CustomerId = c.CustomerId\nWHERE c.Country = 'Canada';",
+  r:"56 righe",
+  e:"<p>In <code>invoice</code> c'è anche <code>BillingCountry</code>, il paese di fatturazione. La richiesta parla di clienti canadesi, quindi il filtro corretto è su <code>customer.Country</code>. In Chinook i due valori coincidono, ma in un database reale un cliente potrebbe farsi fatturare in un altro paese.</p>"},
+ {q:"Mostra ogni cliente con nome e cognome del dipendente che gli fa da rappresentante di supporto (<code>SupportRepId</code>).",
+  h:"In <code>customer</code> la colonna che punta al dipendente si chiama <code>SupportRepId</code>, mentre in <code>employee</code> la PK è <code>EmployeeId</code>. La condizione <code>ON</code> unisce due colonne con nomi diversi.",
+  s:"SELECT c.FirstName, c.LastName,\n       e.FirstName AS repNome, e.LastName AS repCognome\nFROM customer c\nJOIN employee e ON c.SupportRepId = e.EmployeeId;",
+  r:"59 righe",
+  e:"<p>Una FK non deve per forza chiamarsi come la PK a cui punta: conta che i valori corrispondano. Siccome <code>customer</code> ed <code>employee</code> hanno entrambe <code>FirstName</code> e <code>LastName</code>, gli alias servono a capire quale nome è del cliente e quale del rappresentante.</p>"},
+
+ {lvl:"Livello 4 · JOIN e GROUP BY"},
+ {q:"Mostra quanti album ha ogni artista, solo per gli artisti con almeno 3 album.",
+  h:"<code>JOIN</code> tra <code>artist</code> e <code>album</code>, <code>GROUP BY</code> sull'artista, e il filtro sul conteggio va in <code>HAVING</code>.",
+  s:"SELECT ar.Name, COUNT(*) AS numAlbum\nFROM artist ar\nJOIN album al ON ar.ArtistId = al.ArtistId\nGROUP BY ar.ArtistId, ar.Name\nHAVING COUNT(*) >= 3;",
+  r:"26 righe (Led Zeppelin 14, Deep Purple 11, Metallica 10…)",
+  e:"<p>Conviene raggruppare per <code>ArtistId</code> e non solo per <code>Name</code>: due artisti diversi potrebbero avere lo stesso nome e finirebbero nello stesso gruppo. Aggiungere <code>ar.Name</code> al <code>GROUP BY</code> non cambia il risultato, e rende la query valida anche nei DBMS più rigidi.</p><p>«Almeno 3» significa <code>&gt;= 3</code>.</p>"},
+ {q:"Mostra quanti brani ci sono per ogni genere (nome del genere, non l'id), in ordine decrescente.",
+  h:"Come la 15, ma con <code>genre</code> e <code>track</code>, e con un <code>ORDER BY … DESC</code> al posto dell'<code>HAVING</code>.",
+  s:"SELECT g.Name, COUNT(*) AS numBrani\nFROM genre g\nJOIN track t ON g.GenreId = t.GenreId\nGROUP BY g.GenreId, g.Name\nORDER BY numBrani DESC;",
+  r:"25 righe: Rock 1297, Latin 579, Metal 374…",
+  e:"<p>Il <code>JOIN</code> crea una riga per ogni brano con il suo genere accanto. Raggruppando per genere, <code>COUNT(*)</code> conta i brani di ciascuno.</p>"},
+ {q:"Mostra i 10 clienti che hanno speso di più in totale, con nome, cognome e totale speso.",
+  h:"<code>SUM(Total)</code> per ogni cliente, ordine decrescente, e <code>LIMIT</code> per tenere solo le prime 10 righe.",
+  s:"SELECT c.FirstName, c.LastName, SUM(i.Total) AS totaleSpeso\nFROM customer c\nJOIN invoice i ON c.CustomerId = i.CustomerId\nGROUP BY c.CustomerId\nORDER BY totaleSpeso DESC\nLIMIT 10;",
+  r:"10 righe, prima Helena Holý con 49,62",
+  e:"<p>Qui serve <code>SUM</code> e non <code>COUNT</code>: non vuoi sapere quante fatture ha un cliente, ma quanto valgono in tutto. <code>LIMIT</code> viene applicato per ultimo, dopo l'ordinamento, quindi taglia la classifica già ordinata.</p>"},
+
+ {lvl:"Livello 5 · JOIN tripli e GROUP BY"},
+ {q:"Mostra i 10 artisti con più brani nel catalogo (artista → album → brano).",
+  h:"Artista e brano non sono collegati direttamente: il collegamento passa per <code>album</code>. Servono due <code>JOIN</code> di fila, su <code>ArtistId</code> e su <code>AlbumId</code>.",
+  s:"SELECT ar.Name, COUNT(*) AS numBrani\nFROM artist ar\nJOIN album al ON ar.ArtistId = al.ArtistId\nJOIN track t ON al.AlbumId = t.AlbumId\nGROUP BY ar.ArtistId, ar.Name\nORDER BY numBrani DESC\nLIMIT 10;",
+  r:"10 righe, primi Iron Maiden (213) e U2 (135)",
+  e:"<p>Ogni <code>JOIN</code> aggiunge una tabella collegandola a una già presente. Dopo i due join c'è una riga per ogni brano, con album e artista accanto. Raggruppando per artista, <code>COUNT(*)</code> conta i suoi brani su tutti i suoi album.</p>"},
+ {q:"Per ogni genere mostra quante copie sono state vendute in totale (genere → brano → righe fattura).",
+  h:"Il percorso è <code>genre</code> → <code>track</code> → <code>invoiceline</code>. Le copie vendute sono la somma di <code>Quantity</code>, non il numero di righe.",
+  s:"SELECT g.Name, SUM(il.Quantity) AS copieVendute\nFROM genre g\nJOIN track t ON g.GenreId = t.GenreId\nJOIN invoiceline il ON t.TrackId = il.TrackId\nGROUP BY g.GenreId, g.Name\nORDER BY copieVendute DESC;",
+  r:"24 righe: Rock 835, Latin 386, Metal 264…",
+  e:"<p>In Chinook <code>Quantity</code> vale sempre 1, quindi <code>COUNT(*)</code> darebbe lo stesso numero. In generale però una riga di fattura può contenere più copie, e la risposta corretta è <code>SUM(Quantity)</code>.</p><p>I generi sono 25 ma il risultato ha 24 righe: un genere non ha mai venduto niente e il <code>JOIN</code> lo esclude. Per mostrarlo con 0 servirebbero due <code>LEFT JOIN</code> e <code>COALESCE(SUM(il.Quantity), 0)</code>.</p>"},
+ {q:"Per ogni dipendente che fa da rappresentante mostra nome, cognome, numero di clienti seguiti e fatturato totale generato da quei clienti (dipendente → cliente → fattura). Fai attenzione a come conti i clienti.",
+  h:"Dopo il <code>JOIN</code> con <code>invoice</code> ogni cliente compare tante volte quante sono le sue fatture. <code>COUNT(*)</code> conterebbe le fatture, non i clienti: ti serve <code>COUNT(DISTINCT …)</code>.",
+  s:"SELECT e.FirstName, e.LastName,\n       COUNT(DISTINCT c.CustomerId) AS numClienti,\n       SUM(i.Total) AS fatturato\nFROM employee e\nJOIN customer c ON e.EmployeeId = c.SupportRepId\nJOIN invoice i ON c.CustomerId = i.CustomerId\nGROUP BY e.EmployeeId, e.FirstName, e.LastName;",
+  r:"3 righe: Jane Peacock 21 clienti e 833,04; Margaret Park 20 e 775,40; Steve Johnson 18 e 720,16",
+  e:"<p>Questa è la trappola dei join tripli. Jane Peacock segue 21 clienti, che in tutto hanno 146 fatture: dopo il secondo <code>JOIN</code> ci sono 146 righe per lei, e <code>COUNT(*)</code> restituirebbe 146. <code>COUNT(DISTINCT c.CustomerId)</code> conta ogni cliente una volta sola.</p><p>La <code>SUM(i.Total)</code> invece è corretta così, perché ogni fattura compare in una sola riga.</p>"},
+];
+
+/* ---------- dati: ER ---------- */
+const ER = [
+ {title:"Biblioteca",
+  q:"Ogni libro è scritto da un solo autore e pubblicato da una sola casa editrice. Un autore scrive uno o più libri; una casa editrice può non aver ancora pubblicato nulla.",
+  d:{w:860,h:280,
+    ents:[
+      {id:"A",n:"AUTORE",x:90,y:150,at:[["id",-30,-60,1],["nome",25,-60],["nazionalita",0,62]]},
+      {id:"L",n:"LIBRO",x:420,y:150,at:[["isbn",-30,-60,1],["titolo",25,-60],["anno",0,62]]},
+      {id:"E",n:"EDITORE",x:765,y:150,at:[["id",-30,-60,1],["nome",25,-60],["citta",0,62]]}],
+    ass:[{id:"S",n:"SCRIVE",x:255,y:150},{id:"P",n:"PUBBLICA",x:590,y:150}],
+    links:[["A","S","(1,N)"],["L","S","(1,1)"],["L","P","(1,1)"],["E","P","(0,N)"]]},
+  h:"Entrambe le associazioni hanno (1,1) dalla parte di LIBRO. Ripassa in quale tabella va la FK in questo caso.",
+  s:[["AUTORE",[["id","pk"],"nome","nazionalita"]],["EDITORE",[["id","pk"],"nome","citta"]],["LIBRO",[["isbn","pk"],"titolo","anno",["autore","fk"],["editore","fk"]]]],
+  e:"<p>Sono due associazioni uno a molti, lo stesso caso dell'azienda e del servizio taxi nella dispensa. Ogni libro ha un solo autore e un solo editore, quindi bastano due colonne FK in LIBRO. Mettere la FK in AUTORE non si può: un autore con cinque libri dovrebbe avere cinque ISBN nella stessa cella.</p><p>Lo (0,N) di EDITORE non cambia la traduzione: dice solo che possono esistere editori senza libri, cioè righe di EDITORE a cui nessun libro punta. La FK <code>editore</code> in LIBRO resta obbligatoria, perché dal lato del libro la cardinalità è (1,1).</p>"},
+
+ {title:"Palestra",
+  q:"Un iscritto partecipa a zero o più corsi e un corso può avere zero o più iscritti. Ogni corso è tenuto da un solo istruttore. Un iscritto può avere un personal trainer, cioè uno degli istruttori, ma non è obbligatorio.",
+  d:{w:800,h:500,
+    ents:[
+      {id:"I",n:"ISCRITTO",x:170,y:120,at:[["codice_fiscale",-30,-60,1],["nome",25,-60],["cognome",-85,0]]},
+      {id:"C",n:"CORSO",x:620,y:120,at:[["id",-30,-60,1],["nome",25,-60],["giorno",85,0]]},
+      {id:"T",n:"ISTRUTTORE",x:620,y:400,at:[["id",90,-20,1],["nome",90,12],["telefono",0,60]]}],
+    ass:[{id:"P",n:"PARTECIPA",x:395,y:120},{id:"N",n:"TIENE",x:620,y:262},{id:"R",n:"PERSONAL",x:170,y:400}],
+    links:[["I","P","(0,N)"],["C","P","(0,N)"],["C","N","(1,1)"],["T","N","(1,N)"],["I","R","(0,1)"],["T","R","(0,N)"]]},
+  h:"Le tre associazioni sono tre casi diversi: (1,1)–(1,N), (0,N)–(0,N) e (0,1)–(0,N). Il terzo è quello con lo zero: cosa succede alla FK quando il collegamento non c'è?",
+  s:[["ISCRITTO",[["codice_fiscale","pk"],"nome","cognome",["personal_trainer","fk","FK, può essere NULL"]]],["ISTRUTTORE",[["id","pk"],"nome","telefono"]],["CORSO",[["id","pk"],"nome","giorno",["istruttore","fk"]]],["PARTECIPA",[["iscritto","pkfk"],["corso","pkfk"]]]],
+  e:"<p><b>TIENE</b> è uno a molti con (1,1) dalla parte di CORSO: la FK <code>istruttore</code> va in CORSO.</p><p><b>PARTECIPA</b> è molti a molti: nessuna delle due tabelle può contenere l'altra in una sola colonna, quindi serve una tabella apposita con le due FK, che insieme formano la PK.</p><p><b>PERSONAL</b> è (0,1)–(0,N). Come nella dispensa ci sono due soluzioni: la FK <code>personal_trainer</code> in ISCRITTO resa nullable, oppure una tabella PERSONAL(<u>iscritto</u> (FK), allenatore (FK)) con una riga solo per chi il personal ce l'ha. In quella tabella la PK è solo <code>iscritto</code>, perché ogni iscritto ha al massimo un personal trainer. Se metti la FK senza permettere il NULL, obblighi tutti ad averne uno.</p>"},
+
+ {title:"Campionato",
+  q:"Ogni partita si gioca tra una squadra di casa e una squadra ospite. Una squadra gioca molte partite, in casa e in trasferta. Ogni giocatore è tesserato per una sola squadra, e ogni squadra ha uno o più giocatori.",
+  d:{w:800,h:520,
+    ents:[
+      {id:"S",n:"SQUADRA",x:170,y:190,at:[["nome",-30,-60,1],["citta",25,-60]]},
+      {id:"P",n:"PARTITA",x:620,y:190,at:[["id",-30,-60,1],["data",25,-60],["gol_casa",85,-14],["gol_ospite",85,18]]},
+      {id:"G",n:"GIOCATORE",x:170,y:420,at:[["id",95,-16,1],["nome",95,14],["ruolo",0,60]]}],
+    ass:[{id:"C",n:"IN_CASA",x:395,y:110},{id:"T",n:"IN_TRASFERTA",x:395,y:270},{id:"X",n:"TESSERATO",x:170,y:305}],
+    links:[["S","C","(0,N)"],["P","C","(1,1)"],["S","T","(0,N)"],["P","T","(1,1)"],["S","X","(1,N)"],["G","X","(1,1)"]]},
+  h:"Tra SQUADRA e PARTITA ci sono due associazioni con significati diversi: è un'associazione parallela. Ognuna si traduce per conto suo, e i nomi delle colonne devono far capire il ruolo.",
+  s:[["SQUADRA",[["nome","pk"],"citta"]],["GIOCATORE",[["id","pk"],"nome","ruolo",["squadra","fk"]]],["PARTITA",[["id","pk"],"data","gol_casa","gol_ospite",["squadra_casa","fk"],["squadra_ospite","fk"]]]],
+  e:"<p>IN_CASA e IN_TRASFERTA sono entrambe (1,1) dalla parte di PARTITA, quindi ognuna diventa una FK in PARTITA. Le due FK puntano alla stessa tabella SQUADRA, ma rappresentano ruoli diversi: per questo hanno nomi diversi, <code>squadra_casa</code> e <code>squadra_ospite</code>. È lo stesso ragionamento di IMPIEGATO e CITTÀ nella dispensa.</p><p>Non serve nessuna tabella in più. Per sapere tutte le partite di una squadra basta cercarla in una delle due colonne: <code>WHERE squadra_casa = 'X' OR squadra_ospite = 'X'</code>.</p><p>TESSERATO è il solito uno a molti: FK <code>squadra</code> in GIOCATORE.</p>"},
+
+ {title:"Social network",
+  q:"Un utente può seguire altri utenti e può essere seguito da altri utenti. Ogni post è pubblicato da un solo utente. Un utente può mettere like a zero o più post, e un post può ricevere zero o più like.",
+  d:{w:800,h:480,
+    ents:[
+      {id:"U",n:"UTENTE",x:200,y:230,at:[["username",-40,-62,1],["email",0,-74],["data_iscrizione",42,-62]]},
+      {id:"P",n:"POST",x:650,y:230,at:[["id",72,-30,1],["testo",76,0],["data",72,30]]}],
+    ass:[{id:"B",n:"PUBBLICA",x:430,y:150},{id:"L",n:"METTE_LIKE",x:430,y:310},{id:"F",n:"SEGUE",x:200,y:410}],
+    links:[["U","B","(0,N)"],["P","B","(1,1)"],["U","L","(0,N)"],["P","L","(0,N)"]],
+    raw:[{pts:[[170,230],[170,410]],card:"(0,N)",cardAt:[138,282],role:"seguace",roleAt:[132,340]},
+         {pts:[[230,230],[230,410]],card:"(0,N)",cardAt:[262,282],role:"seguito",roleAt:[268,340]}]},
+  h:"Ci sono due cose da riconoscere: un'associazione ricorsiva (SEGUE, da UTENTE a UTENTE) e due associazioni parallele tra UTENTE e POST. Per ognuna guarda le cardinalità: quali sono molti a molti?",
+  s:[["UTENTE",[["username","pk"],"email","data_iscrizione"]],["POST",[["id","pk"],"testo","data",["autore","fk"]]],["SEGUE",[["seguace","pkfk"],["seguito","pkfk"]]],["METTE_LIKE",[["utente","pkfk"],["post","pkfk"]]]],
+  e:"<p><b>SEGUE</b> è ricorsiva e molti a molti: un utente segue tanti utenti e ne è seguito da tanti. Come per i ministri nella dispensa, serve una tabella con due FK verso UTENTE, una per ruolo (<code>seguace</code>, <code>seguito</code>), che insieme formano la PK.</p><p><b>PUBBLICA</b> e <b>METTE_LIKE</b> sono parallele: stesse due entità, significati diversi. PUBBLICA è (1,1) dalla parte del post, quindi diventa la FK <code>autore</code> in POST. METTE_LIKE è molti a molti, quindi diventa una tabella a parte.</p><p>Se avessi chiamato la tabella <code>LIKE</code> avresti avuto problemi, perché <code>LIKE</code> è una parola riservata di SQL.</p>"},
+
+ {title:"Catena di hotel",
+  q:"Ogni camera appartiene a un solo hotel ed è identificata dal suo numero più l'hotel: due hotel diversi possono avere entrambi la camera 101. Un cliente prenota una o più camere, e per ogni prenotazione si registrano data di arrivo e data di partenza. Lo stesso cliente può prenotare la stessa camera più volte, in periodi diversi.",
+  d:{w:800,h:520,
+    ents:[
+      {id:"H",n:"HOTEL",x:130,y:140,at:[["id",-30,-60,1],["nome",25,-60],["citta",0,62]]},
+      {id:"C",n:"CAMERA",x:540,y:140,at:[["numero",-30,-60,1],["piano",25,-60],["tipo",88,0]]},
+      {id:"K",n:"CLIENTE",x:540,y:420,at:[["codice_fiscale",-30,60,1],["nome",90,-12],["telefono",90,14]]}],
+    ass:[{id:"A",n:"HA",x:330,y:140},{id:"P",n:"PRENOTA",x:540,y:280,at:[["data_arrivo",-95,-12],["data_partenza",-95,14]]}],
+    links:[["H","A","(1,N)"],["C","A","(1,1)"],["C","P","(0,N)"],["K","P","(1,N)"]],
+    notes:[["identificatore = numero + hotel",528,204,"end"]]},
+  h:"CAMERA ha un identificatore esterno: la sua PK è composta e una parte è anche FK. Quando poi un'altra tabella punta a CAMERA, quante colonne servono per la FK? E nella prenotazione, cosa distingue due soggiorni dello stesso cliente nella stessa camera?",
+  s:[["HOTEL",[["id","pk"],"nome","citta"]],["CAMERA",[["numero","pk"],["hotel","pkfk"],"piano","tipo"]],["CLIENTE",[["codice_fiscale","pk"],"nome","telefono"]],["PRENOTA",[["cliente","pkfk"],["numero_camera","pkfk"],["hotel","pkfk"],["data_arrivo","pk"],"data_partenza"]]],
+  sn:"In PRENOTA, (numero_camera, hotel) è un'unica FK composta verso CAMERA.",
+  e:"<p><b>CAMERA</b> ha un identificatore esterno, come lo studente con matricola e università. La PK è (numero, hotel), e <code>hotel</code> è anche FK verso HOTEL. Si può fare perché la cardinalità dalla parte di CAMERA è (1,1): ogni camera ha un solo hotel. L'associazione HA non serve tradurla a parte, è già rappresentata da quella FK.</p><p><b>PRENOTA</b> è molti a molti, quindi diventa una tabella. Per puntare a una camera non basta il numero, serve tutta la sua PK: la FK verso CAMERA è composta da due colonne, <code>numero_camera</code> e <code>hotel</code>. Gli attributi dell'associazione (le date) diventano colonne di questa tabella.</p><p>Con PK solo (cliente, numero_camera, hotel), lo stesso cliente non potrebbe prenotare la stessa camera una seconda volta. Aggiungendo <code>data_arrivo</code> alla PK, due soggiorni in periodi diversi diventano due righe distinte.</p>"},
+];
+
+/* ---------- rendering ---------- */
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const KW = /\b(SELECT|FROM|WHERE|JOIN|LEFT|ON|AS|AND|OR|NOT|IS|NULL|IN|LIKE|ORDER|BY|GROUP|HAVING|DESC|ASC|LIMIT|DISTINCT|COUNT|SUM|AVG|YEAR|ROUND|COALESCE)\b/g;
+function hl(sql){
+  return sql.split(/('[^']*')/).map((part,i)=>{
+    if(i%2) return `<span class="str">${esc(part)}</span>`;
+    return esc(part).replace(KW,'<span class="kw">$1</span>').replace(/(?<![\w.])(\d+(?:\.\d+)?)\b/g,'<span class="num">$1</span>');
+  }).join("");
+}
+let uid = 0;
+function card(num, bodyHTML, hint, solHTML, expHTML){
+  const id = "x"+(++uid);
+  return `<article class="ex">
+    ${bodyHTML(num)}
+    <div class="btns">
+      <button type="button" class="b-hint" id="${id}-bh" aria-expanded="false" aria-controls="${id}-h">Chiedi indizio</button>
+      <button type="button" class="b-sol" id="${id}-bs" aria-expanded="false" aria-controls="${id}-s">Rivela soluzione</button>
+      <button type="button" class="b-exp" id="${id}-be" aria-expanded="false" aria-controls="${id}-e">Spiega soluzione</button>
+    </div>
+    <div class="panels">
+      <div class="panel p-hint" id="${id}-h" hidden><span class="tag">Indizio</span><p>${hint}</p></div>
+      <div class="panel p-sol" id="${id}-s" hidden><span class="tag">Soluzione</span>${solHTML}</div>
+      <div class="panel p-exp" id="${id}-e" hidden><span class="tag">Spiegazione</span>${expHTML}</div>
+    </div>
+  </article>`;
+}
+
+/* query */
+(function(){
+  let html = "", n = 0, open = false;
+  for(const it of SQL){
+    if(it.lvl){ if(open) html += "</div>"; html += `<h3 class="level">${it.lvl}</h3><div class="list">`; open = true; continue; }
+    n++;
+    html += card(n,
+      num=>`<div class="ex-head"><span class="ex-num">${num}</span><p class="ex-text">${it.q}</p></div>`,
+      it.h,
+      `<pre class="code">${hl(it.s)}</pre><div class="result">Risultato atteso: ${it.r}</div>`,
+      it.e);
+  }
+  if(open) html += "</div>";
+  document.getElementById("sql-list").innerHTML = html;
+})();
+
+/* schema logico */
+function schema(tabs, note){
+  const rows = tabs.map(([t, cols])=>{
+    const c = cols.map(col=>{
+      if(typeof col === "string") return col;
+      const [name, kind, label] = col;
+      if(kind === "pk") return `<span class="pk">${name}</span>`;
+      const fk = `<i>${name}</i> (${label || "FK"})`;
+      return kind === "pkfk" ? `<span class="pk"><i>${name}</i></span> (FK)` : fk;
+    }).join(", ");
+    return `<div><span class="t">${t}</span>(${c})</div>`;
+  }).join("");
+  return `<div class="schema">${rows}</div>${note ? `<div class="result">${note}</div>` : ""}`;
+}
+
+/* diagrammi ER */
+const NS = "http://www.w3.org/2000/svg";
+function entSize(n){ return {w: Math.max(100, n.length*9 + 28), h: 46}; }
+function assSize(n){ return {w: Math.max(100, n.length*7.6 + 44), h: 56}; }
+function diagram(d, title){
+  const nodes = {};
+  d.ents.forEach(e=>nodes[e.id] = {...e, ...entSize(e.n), kind:"e"});
+  d.ass.forEach(a=>nodes[a.id] = {...a, ...assSize(a.n), kind:"a"});
+  let lines = "", cards = "", shapes = "", attrs = "";
+  function attrSet(node){
+    (node.at||[]).forEach(([name,dx,dy,key])=>{
+      const px = node.x+dx, py = node.y+dy;
+      lines += `<line class="er-line" x1="${node.x}" y1="${node.y}" x2="${px}" y2="${py}"/>`;
+      let tx = px, ty = py+4, anc = "middle";
+      if(dx < -5){ tx = px-9; anc = "end"; }
+      else if(dx > 5){ tx = px+9; anc = "start"; }
+      else { ty = dy < 0 ? py-10 : py+19; }
+      attrs += `<g class="er-attr"><circle class="${key?"id":""}" cx="${px}" cy="${py}" r="4.5"/><text x="${tx}" y="${ty}" text-anchor="${anc}">${name}</text></g>`;
+    });
+  }
+  d.links.forEach(([eId,aId,cardTxt])=>{
+    const e = nodes[eId], a = nodes[aId];
+    lines += `<line class="er-line" x1="${e.x}" y1="${e.y}" x2="${a.x}" y2="${a.y}"/>`;
+    const dx = a.x-e.x, dy = a.y-e.y, L = Math.hypot(dx,dy), ux = dx/L, uy = dy/L;
+    const t = Math.min(ux ? (e.w/2)/Math.abs(ux) : 1e9, uy ? (e.h/2)/Math.abs(uy) : 1e9);
+    const off = 11 + 16*Math.abs(uy);
+    let cx = e.x + ux*(t+24) - uy*off, cy = e.y + uy*(t+24) + ux*(-off);
+    if(Math.abs(uy) > 0.85){ cx = e.x + ux*(t+24) + 26; cy = e.y + uy*(t+22) + 4; }
+    else if(Math.abs(uy) < 0.3){ cy = e.y + uy*(t+24) - 11; }
+    cards += `<text class="er-card" x="${cx.toFixed(1)}" y="${(cy+4).toFixed(1)}" text-anchor="middle">${cardTxt}</text>`;
+  });
+  (d.raw||[]).forEach(r=>{
+    lines += `<polyline class="er-line" points="${r.pts.map(p=>p.join(",")).join(" ")}"/>`;
+    cards += `<text class="er-card" x="${r.cardAt[0]}" y="${r.cardAt[1]}" text-anchor="middle">${r.card}</text>`;
+    if(r.role) cards += `<text class="er-role" x="${r.roleAt[0]}" y="${r.roleAt[1]}" text-anchor="middle">${r.role}</text>`;
+  });
+  Object.values(nodes).forEach(nd=>{
+    attrSet(nd);
+    if(nd.kind === "e"){
+      shapes += `<g class="er-ent"><rect x="${nd.x-nd.w/2}" y="${nd.y-nd.h/2}" width="${nd.w}" height="${nd.h}"/><text x="${nd.x}" y="${nd.y+4.5}" text-anchor="middle">${nd.n}</text></g>`;
+    } else {
+      const hw = nd.w/2, hh = nd.h/2;
+      shapes += `<g class="er-ass"><polygon points="${nd.x-hw},${nd.y} ${nd.x},${nd.y-hh} ${nd.x+hw},${nd.y} ${nd.x},${nd.y+hh}"/><text x="${nd.x}" y="${nd.y+4}" text-anchor="middle">${nd.n}</text></g>`;
+    }
+  });
+  const notes = (d.notes||[]).map(([t,x,y,anc])=>`<text class="er-note" x="${x}" y="${y}" text-anchor="${anc||"start"}">${t}</text>`).join("");
+  return `<div class="diagram"><svg viewBox="0 0 ${d.w} ${d.h}" xmlns="${NS}" role="img" aria-label="Schema ER: ${title}"><title>Schema ER: ${title}</title>${lines}${shapes}${attrs}${cards}${notes}</svg></div>`;
+}
+
+(function(){
+  let html = "";
+  ER.forEach((it, i)=>{
+    html += card(i+1,
+      num=>`<div class="ex-head"><span class="ex-num">${num}</span><div style="min-width:0"><h4 class="ex-title">${it.title}</h4><p class="ex-text">${it.q} Traduci lo schema ER in schema logico compatto.</p></div></div>${diagram(it.d, it.title)}`,
+      it.h,
+      schema(it.s, it.sn),
+      it.e);
+  });
+  document.getElementById("er-list").innerHTML = html;
+})();
+
+/* tasti */
+document.addEventListener("click", ev=>{
+  const b = ev.target.closest(".btns button");
+  if(!b) return;
+  const p = document.getElementById(b.getAttribute("aria-controls"));
+  const show = p.hidden;
+  p.hidden = !show;
+  b.setAttribute("aria-expanded", String(show));
+  const base = {"b-hint":["Chiedi indizio","Nascondi indizio"],"b-sol":["Rivela soluzione","Nascondi soluzione"],"b-exp":["Spiega soluzione","Nascondi spiegazione"]};
+  const k = Object.keys(base).find(c=>b.classList.contains(c));
+  b.textContent = base[k][show ? 1 : 0];
+});
+</script>
+
+</body>
+</html>

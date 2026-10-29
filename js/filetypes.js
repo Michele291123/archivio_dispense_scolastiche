@@ -10,6 +10,7 @@ const KINDS = [
   { kind: 'Presentazione', ext: ['ppt', 'pptx', 'odp', 'key'] },
   { kind: 'Immagine', image: true, viewable: true, ext: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif', 'svg'] },
   { kind: 'Testo', viewable: true, ext: ['txt'] },
+  { kind: 'Pagina web', viewable: true, ext: ['html', 'htm'] },
   { kind: 'Testo', ext: ['md'] },
   { kind: 'Archivio', ext: ['zip', 'rar', '7z'] },
 ];

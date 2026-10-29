@@ -56,6 +56,10 @@
     "file": "dispense/informatica/db/progettazione_logica_normalizzazione_sql_informatica.pdf"
   },
   {
+    "info": "dispense/informatica/esercizi/esercizi_sql_schemi_logici_informatica.yml",
+    "file": "dispense/informatica/esercizi/esercizi_sql_schemi_logici_informatica.html"
+  },
+  {
     "info": "dispense/informatica/sql/comandi_sql.yml",
     "file": "dispense/informatica/sql/comandi_sql.png"
   },
