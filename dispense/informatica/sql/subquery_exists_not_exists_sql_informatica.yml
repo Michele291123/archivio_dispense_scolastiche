@@ -1,0 +1,5 @@
+titolo: "query annidate e exists / not exists"
+descrizione: "Subquery semplici e correlate, EXISTS e NOT EXISTS, NOT IN e i NULL, subquery in HAVING e doppio NOT EXISTS, con esempi sul database Chinook"
+autore: "Claude + Michele A."
+materia: "Informatica"
+argomento: "SQL"
