@@ -250,7 +250,7 @@ export function plan(fields, forms) {
   const descrizione = oneLine(fields.get('descrizione'), MAX_LENGTH.descrizione);
   const autore = oneLine(fields.get('autore'), MAX_LENGTH.autore);
   if (!titolo) problems.push('manca il **Titolo**');
-  if (!autore) problems.push('manca l\u2019**Autore**');
+  if (!autore) problems.push('manca l’**Autore**');
 
   // Argomento: uno di quelli in tendina, oppure quello scritto a mano.
   const chosen = oneLine(fields.get('argomento'), 100);
@@ -258,14 +258,14 @@ export function plan(fields, forms) {
   let isNewTopic = false;
 
   if (!chosen) {
-    problems.push('manca l\u2019**Argomento**');
+    problems.push('manca l’**Argomento**');
   } else if (slugify(chosen) === slugify(NEW_TOPIC)) {
     const written = cleanTopic(fields.get('nuovo argomento'));
     const slug = slugify(written);
     if (!slug) {
-      problems.push('hai scelto \u201cNuovo argomento\u201d ma il campo **Nuovo argomento** è vuoto (servono lettere o cifre)');
+      problems.push('hai scelto “Nuovo argomento” ma il campo **Nuovo argomento** è vuoto (servono lettere o cifre)');
     } else if (slug === slugify(NEW_TOPIC)) {
-      problems.push('il nome del nuovo argomento non può essere \u201cNuovo argomento\u201d');
+      problems.push('il nome del nuovo argomento non può essere “Nuovo argomento”');
     } else {
       // Se esiste già, anche scritto diversamente, si usa quello.
       const existing = form.topics.find((topic) => slugify(topic) === slug);
@@ -274,7 +274,7 @@ export function plan(fields, forms) {
     }
   } else {
     argomento = form.topics.find((topic) => slugify(topic) === slugify(chosen)) || '';
-    if (!argomento) problems.push('l\u2019**Argomento** scelto non è tra quelli del modulo: scegline uno dalla tendina oppure \u201cNuovo argomento\u201d');
+    if (!argomento) problems.push('l’**Argomento** scelto non è tra quelli del modulo: scegline uno dalla tendina oppure “Nuovo argomento”');
   }
 
   // Allegato: uno solo, caricato su GitHub, con un'estensione ammessa.
@@ -286,7 +286,7 @@ export function plan(fields, forms) {
   if (attachments.length === 0) {
     problems.push('manca il **File**: caricalo nel campo del modulo');
   } else if (attachments.length > 1) {
-    problems.push('nel campo **File** c\u2019è più di un allegato: caricane uno solo (per più file usa uno zip)');
+    problems.push('nel campo **File** c’è più di un allegato: caricane uno solo (per più file usa uno zip)');
   } else if (!isAttachmentUrl(attachments[0].url)) {
     problems.push('il **File** va caricato nel campo del modulo: i link ad altri siti non vengono scaricati');
   } else {
@@ -304,7 +304,7 @@ export function plan(fields, forms) {
     extension = urlParts.extension || nameParts.extension;
     baseName = cleanFileName(nameParts.extension ? nameParts.base : attachment.name || (urlParts.extension ? urlParts.base : ''));
     if (extension && !EXTENSIONS.includes(extension)) {
-      problems.push(`i file \u201c.${oneLine(extension, 12).replace(/[^a-z0-9]/g, '')}\u201d non sono ammessi. Estensioni ammesse: ${EXTENSIONS.join(', ')}`);
+      problems.push(`i file “.${oneLine(extension, 12).replace(/[^a-z0-9]/g, '')}” non sono ammessi. Estensioni ammesse: ${EXTENSIONS.join(', ')}`);
     }
   }
 
@@ -339,7 +339,7 @@ async function fetchAttachment(url, token) {
   // I rinvii si seguono a mano, per controllare ogni indirizzo e per non
   // mandare il token fuori da github.com.
   for (let hop = 0; hop < 6; hop += 1) {
-    if (current.protocol !== 'https:' || !isDownloadHost(current.hostname)) throw new ProposalError('L\u2019allegato rimanda a un indirizzo che non è di GitHub: non lo scarico.');
+    if (current.protocol !== 'https:' || !isDownloadHost(current.hostname)) throw new ProposalError('L’allegato rimanda a un indirizzo che non è di GitHub: non lo scarico.');
 
     const headers = { 'User-Agent': 'archivio-dispense', Accept: '*/*' };
     if (token && current.hostname === 'github.com') headers.Authorization = `Bearer ${token}`;
@@ -352,7 +352,7 @@ async function fetchAttachment(url, token) {
     }
     return response;
   }
-  throw new ProposalError('Non riesco a scaricare l\u2019allegato: troppi rinvii.');
+  throw new ProposalError('Non riesco a scaricare l’allegato: troppi rinvii.');
 }
 
 // Scarica l'allegato: prima senza token (repo pubblica), poi con il token.
@@ -361,9 +361,9 @@ export async function download(url, token) {
 
   let response = await fetchAttachment(url, '');
   if (!response.ok && token) response = await fetchAttachment(url, token);
-  if (!response.ok) throw new ProposalError(`Non riesco a scaricare l\u2019allegato (risposta ${response.status}). Riprova caricando di nuovo il file in una nuova issue.`);
+  if (!response.ok) throw new ProposalError(`Non riesco a scaricare l’allegato (risposta ${response.status}). Riprova caricando di nuovo il file in una nuova issue.`);
 
-  const tooBig = new ProposalError(`Il file supera ${MAX_BYTES / 1024 / 1024} MB: è troppo grande per l\u2019archivio.`);
+  const tooBig = new ProposalError(`Il file supera ${MAX_BYTES / 1024 / 1024} MB: è troppo grande per l’archivio.`);
   if (Number(response.headers.get('content-length')) > MAX_BYTES) throw tooBig;
 
   const chunks = [];
@@ -423,6 +423,15 @@ export async function writeProposal(proposal, { data, type }, root = ROOT) {
 
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, stdio: 'inherit' });
 
+const hasRemoteBranch = (branch) => {
+  try {
+    execFileSync('git', ['ls-remote', '--exit-code', '--heads', 'origin', branch], { cwd: ROOT, stdio: 'pipe' });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 async function api(method, path, body) {
   const response = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${path}`, {
     method,
@@ -469,7 +478,14 @@ async function run() {
 
     git('config', 'user.name', 'github-actions[bot]');
     git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com');
-    git('checkout', '-b', branch);
+
+    if (hasRemoteBranch(branch)) {
+      git('fetch', 'origin', branch);
+      git('checkout', '-B', branch, `origin/${branch}`);
+    } else {
+      git('checkout', '-b', branch);
+    }
+
     git('add', '--', ...paths);
     git('commit', '-m', `Dispensa dalla issue #${number}: ${info.titolo}`);
     git('push', 'origin', branch);
@@ -489,12 +505,12 @@ async function run() {
         infoFile(info).trimEnd(),
         '~~~~',
         '',
-        proposal.isNewTopic ? `L\u2019argomento è nuovo: è stato aggiunto anche alla tendina in \`${proposal.form.path}\`.\n` : '',
+        proposal.isNewTopic ? `L’argomento è nuovo: è stato aggiunto anche alla tendina in \`${proposal.form.path}\`.\n` : '',
         '**Prima di accettare** apri il file e controlla che sia davvero una dispensa e che titolo, autore e argomento siano giusti. Questa pull request non viene accettata in automatico.',
       ].join('\n'),
     });
 
-    await comment(number, `Grazie! Ho preparato la pull request ${pull.html_url} con la tua dispensa. Un collaboratore la controllerà e, se va bene, la aggiungerà all\u2019archivio: questa issue si chiuderà da sola.`);
+    await comment(number, `Grazie! Ho preparato la pull request ${pull.html_url} con la tua dispensa. Un collaboratore la controllerà e, se va bene, la aggiungerà all’archivio: questa issue si chiude.`);
     console.log(`Pull request aperta: ${pull.html_url}`);
   } catch (error) {
     if (error instanceof ProposalError) {
@@ -505,9 +521,9 @@ async function run() {
 
     // Il caso più comune: le Actions non hanno il permesso di aprire pull request.
     const hint = error.status === 403
-      ? ' Probabile causa: in *Settings > Actions > General > Workflow permissions* non è attiva la voce \u201cAllow GitHub Actions to create and approve pull requests\u201d.'
+      ? ' Probabile causa: in *Settings > Actions > General > Workflow permissions* non è attiva la voce “Allow GitHub Actions to create and approve pull requests”.'
       : '';
-    await comment(number, `Qualcosa è andato storto mentre preparavo la pull request: non dipende da come hai compilato il modulo.${hint} Un collaboratore può guardare i dettagli nella scheda **Actions**.`).catch(() => {});
+    await comment(number, `Qualcosa è andato storto mentre preparavo la pull request: non dipende da come hai compilato il modulo.${hint} Un collaboratore può guardare i dettagli nella scheda *Actions*.`);
     throw error;
   }
 }
