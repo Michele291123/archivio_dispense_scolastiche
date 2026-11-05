@@ -35,7 +35,11 @@ const MOVED = {
   'dispense/appunti_db_teoria_informatica.pdf':
     'dispense/informatica/db/appunti_db_teoria_informatica.pdf',
   'dispense/Manuale_Cisco_PacketTracer.pdf':
-    'dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.pdf',
+    'dispense/sistemi-e-reti/manuali/Manuale_Cisco_PacketTracer.pdf',
+  'dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.pdf':
+    'dispense/sistemi-e-reti/manuali/Manuale_Cisco_PacketTracer.pdf',
+  'dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Reti.docx':
+    'dispense/sistemi-e-reti/manuali/Manuale_Reti.docx',
   'dispense/Servizi_Laboratorio.pdf':
     'dispense/sistemi-e-reti/laboratorio-ciscopt/Servizi_Laboratorio.pdf',
   'dispense/Rivoluzione Americana Storia.pdf':

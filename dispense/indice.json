@@ -72,6 +72,10 @@
     "file": "dispense/informatica/sql/ordine_esecuzione_sql.png"
   },
   {
+    "info": "dispense/informatica/sql/subquery_exists_not_exists_sql_informatica.yml",
+    "file": "dispense/informatica/sql/subquery_exists_not_exists_sql_informatica.pdf"
+  },
+  {
     "info": "dispense/inglese/job/cv_cover_letter_interviews_studio.yml",
     "file": "dispense/inglese/job/cv_cover_letter_interviews_studio.pdf"
   },
@@ -104,14 +108,6 @@
     "file": "dispense/matematica/geometria-analitica/curve_geometria_analitica.PNG"
   },
   {
-    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.yml",
-    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Cisco_PacketTracer.pdf"
-  },
-  {
-    "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Reti.yml",
-    "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/Manuale_Reti.docx"
-  },
-  {
     "info": "dispense/sistemi-e-reti/laboratorio-ciscopt/Servizi_Laboratorio.yml",
     "file": "dispense/sistemi-e-reti/laboratorio-ciscopt/Servizi_Laboratorio.pdf"
   },
@@ -138,6 +134,18 @@
   {
     "info": "dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.yml",
     "file": "dispense/sistemi-e-reti/livello-7-applicazione/livello_applicazione_sistemi_reti.pdf"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/manuali/Manuale_Cisco_PacketTracer.yml",
+    "file": "dispense/sistemi-e-reti/manuali/Manuale_Cisco_PacketTracer.pdf"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/manuali/Manuale_Reti.yml",
+    "file": "dispense/sistemi-e-reti/manuali/Manuale_Reti.docx"
+  },
+  {
+    "info": "dispense/sistemi-e-reti/manuali/cisco_packet_tracer_sistemi_e_reti.yml",
+    "file": "dispense/sistemi-e-reti/manuali/cisco_packet_tracer_sistemi_e_reti.pdf"
   },
   {
     "info": "dispense/storia/quarto-anno/Rivoluzione_Americana_Storia.yml",
