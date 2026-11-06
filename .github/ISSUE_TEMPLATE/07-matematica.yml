@@ -50,6 +50,7 @@ body:
         - "Derivate"
         - "Funzioni 2 variabili"
         - "Geometria analitica"
+        - "Esercizi"
         - "Nuovo argomento"
     validations:
       required: true
