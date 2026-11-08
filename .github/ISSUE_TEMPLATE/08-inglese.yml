@@ -48,6 +48,7 @@ body:
       description: La cartella dentro Inglese. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
         - "Job"
+        - "letteratura"
         - "Nuovo argomento"
     validations:
       required: true
