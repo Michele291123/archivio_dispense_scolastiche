@@ -48,6 +48,7 @@ body:
       description: La cartella dentro Italiano. Se non c'è quella che ti serve scegli "Nuovo argomento".
       options:
         - "Secondo Ottocento"
+        - "Libri"
         - "Nuovo argomento"
     validations:
       required: true
