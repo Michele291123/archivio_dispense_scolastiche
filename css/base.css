@@ -26,6 +26,13 @@
   /* Colore della materia: lo imposta il JS sul singolo elemento */
   --accent: var(--muted);
 
+  /* Sfumature tono su tono: stesso colore, dal chiaro allo scuro */
+  --title-fade: linear-gradient(180deg, var(--text) 40%, color-mix(in srgb, var(--text) 62%, var(--bg)));
+  --button-fade: linear-gradient(180deg, #fffaf0, #d9d2c3);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
   color-scheme: dark;
 }
 
@@ -36,6 +43,8 @@
   --line: #d5d2c9;
   --text: #151412;
   --muted: #625e56;
+
+  --button-fade: linear-gradient(180deg, #3a3833, #151412);
 
   color-scheme: light;
 }
@@ -140,5 +149,7 @@ main:focus {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
   }
 }

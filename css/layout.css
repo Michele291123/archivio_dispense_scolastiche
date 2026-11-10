@@ -6,17 +6,21 @@
   width: 100%;
   max-width: 1160px;
   margin-inline: auto;
-  padding-inline: clamp(18px, 4vw, 40px);
+  padding-inline: clamp(16px, 4vw, 40px);
 }
 
-/* Barra in alto ---------------------------------------------------------- */
+/* Barra in alto: vetro smerigliato sopra il contenuto che scorre ---------- */
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 10;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
   background: var(--bg);
-  transition: background-color 0.25s ease;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .topbar__inner {
@@ -32,8 +36,27 @@
   padding-bottom: clamp(56px, 10vw, 120px);
 }
 
+/* Ogni vista entra con una dissolvenza dal basso. Durante la ricerca la vista
+   si ridisegna a ogni lettera: lì js/app.js aggiunge "view--static" e
+   l'animazione non riparte. */
+.view {
+  animation: rise 0.45s var(--ease) both;
+}
+
+.view--static,
+.view--static * {
+  animation: none !important;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
 .page-head {
-  padding-block: clamp(28px, 6vw, 72px) clamp(28px, 4.5vw, 48px);
+  padding-block: clamp(28px, 6vw, 72px) clamp(26px, 4.5vw, 48px);
 }
 
 .page-head__row {
@@ -48,33 +71,46 @@
   width: 8px;
   border-radius: 4px;
   background: var(--accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 65%, #fff), var(--accent) 55%, color-mix(in srgb, var(--accent) 70%, #000));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .page-head .crumb {
-  margin-bottom: clamp(20px, 3vw, 32px);
+  margin-bottom: clamp(18px, 3vw, 32px);
 }
 
+/* Titolo: sfumatura tono su tono; nelle materie vira al loro colore */
 .page-title {
-  font: 900 clamp(3rem, 10.5vw, 6.75rem) / 0.88 var(--font-display);
+  padding-bottom: 0.06em;
+  font: 900 clamp(2.7rem, 10.5vw, 6.75rem) / 0.88 var(--font-display);
   text-transform: uppercase;
   overflow-wrap: break-word;
+  background: var(--title-fade);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-head--accent .page-title {
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--accent) 45%, var(--text)), var(--accent));
 }
 
 .page-note {
-  margin-top: 16px;
+  margin-top: 14px;
   color: var(--muted);
   font: 400 0.85rem/1.5 var(--font-mono);
 }
 
 /* Il nome di un argomento è più lungo di quello di una materia */
 .page-title--topic {
-  font-size: clamp(2.4rem, 7.5vw, 4.75rem);
+  font-size: clamp(2.1rem, 7.5vw, 4.75rem);
   line-height: 0.92;
 }
 
 /* Bottone sotto il titolo della pagina iniziale */
 .page-head__action {
-  margin-top: clamp(20px, 3vw, 28px);
+  margin-top: clamp(18px, 3vw, 28px);
 }
 
 /* Griglia delle cartelle ------------------------------------------------- */
@@ -97,19 +133,46 @@
   gap: 40px 22px;
 }
 
+/* Cartelle e dispense compaiono una dopo l'altra */
+.folders > li,
+.docs > li {
+  animation: pop 0.5s var(--ease) both;
+  animation-delay: calc(var(--i, 12) * 40ms + 60ms);
+}
+
+.folders > li:nth-child(1), .docs > li:nth-child(1) { --i: 0; }
+.folders > li:nth-child(2), .docs > li:nth-child(2) { --i: 1; }
+.folders > li:nth-child(3), .docs > li:nth-child(3) { --i: 2; }
+.folders > li:nth-child(4), .docs > li:nth-child(4) { --i: 3; }
+.folders > li:nth-child(5), .docs > li:nth-child(5) { --i: 4; }
+.folders > li:nth-child(6), .docs > li:nth-child(6) { --i: 5; }
+.folders > li:nth-child(7), .docs > li:nth-child(7) { --i: 6; }
+.folders > li:nth-child(8), .docs > li:nth-child(8) { --i: 7; }
+.folders > li:nth-child(9), .docs > li:nth-child(9) { --i: 8; }
+.folders > li:nth-child(10), .docs > li:nth-child(10) { --i: 9; }
+.folders > li:nth-child(11), .docs > li:nth-child(11) { --i: 10; }
+.folders > li:nth-child(12), .docs > li:nth-child(12) { --i: 11; }
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+
 /* Gruppi con un titolo: i risultati di ricerca divisi per materia e, nella
    pagina di una materia, le dispense senza argomento sotto le cartelle ---- */
 
 .group + .group,
 .folders + .group {
-  margin-top: clamp(44px, 7vw, 72px);
+  margin-top: clamp(40px, 7vw, 72px);
 }
 
 .group__title {
   display: flex;
   gap: 12px;
   margin-bottom: 22px;
-  font: 900 clamp(1.7rem, 5vw, 2.3rem) / 0.95 var(--font-display);
+  font: 900 clamp(1.6rem, 5vw, 2.3rem) / 0.95 var(--font-display);
   text-transform: uppercase;
 }
 
@@ -119,6 +182,7 @@
   width: 6px;
   border-radius: 3px;
   background: var(--accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 65%, #fff), var(--accent) 60%);
 }
 
 .group__title a:hover {
@@ -127,20 +191,25 @@
   text-underline-offset: 5px;
 }
 
-/* Schermi piccoli -------------------------------------------------------- */
+/* Telefoni e schermi stretti: sempre due cartelle e due dispense per riga -- */
 
-@media (max-width: 560px) {
+@media (max-width: 700px) {
   .topbar__inner {
-    height: 64px;
+    height: 60px;
+    gap: 10px;
   }
 
   .folders {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 12px;
+    gap: 16px 10px;
   }
 
   .docs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 30px 14px;
+    gap: 24px 12px;
+  }
+
+  .page-head--accent .page-head__row::before {
+    width: 6px;
   }
 }

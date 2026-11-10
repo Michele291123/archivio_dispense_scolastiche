@@ -18,6 +18,10 @@ const search = document.getElementById('search');
 
 let archive = null;
 
+// Vero mentre si sta scrivendo nella ricerca: la vista si ridisegna a ogni
+// lettera e l'animazione d'ingresso non deve ripartire ogni volta.
+let searching = false;
+
 // Un pezzo dell'indirizzo; se è codificato male non corrisponde a niente.
 function decode(part) {
   try {
@@ -63,6 +67,9 @@ function render() {
   } else {
     view = homeView(archive);
   }
+
+  if (query && searching) view.classList.add('view--static');
+  searching = Boolean(query);
 
   main.replaceChildren(view);
   document.title = title;

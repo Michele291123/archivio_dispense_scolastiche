@@ -26,6 +26,11 @@
 .brand__mark {
   width: 24px;
   height: 24px;
+  transition: transform 0.3s var(--ease);
+}
+
+.brand:hover .brand__mark {
+  transform: rotate(-8deg) scale(1.1);
 }
 
 .brand__name {
@@ -51,12 +56,14 @@
   background: var(--surface);
   color: var(--muted);
   cursor: text;
-  transition: border-color 0.18s ease, background-color 0.25s ease;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  transition: border-color 0.18s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .search:focus-within {
   border-color: var(--text);
   color: var(--text);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--text) 12%, transparent);
 }
 
 .search__icon {
@@ -115,16 +122,25 @@
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
-  transition: border-color 0.18s ease, background-color 0.25s ease;
+  transition: border-color 0.18s ease, background-color 0.25s ease, transform 0.2s var(--ease);
 }
 
 .theme-toggle:hover {
   border-color: var(--muted);
 }
 
+.theme-toggle:active {
+  transform: scale(0.9);
+}
+
 .theme-toggle svg {
   width: 20px;
   height: 20px;
+  transition: transform 0.5s var(--ease);
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(40deg);
 }
 
 /* Nel tema scuro il tasto mostra il sole (porta al chiaro), e viceversa */
@@ -140,25 +156,41 @@
 /* Bottone: "Carica dispensa", "Entra" ------------------------------------ */
 
 .button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   height: 44px;
   padding: 0 20px 0 16px;
-  border: 1px solid var(--text);
+  border: 0;
   border-radius: var(--radius-pill);
   background: var(--text);
+  background: var(--button-fade);
   color: var(--bg);
   font: 500 0.82rem/1 var(--font-mono);
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  box-shadow: 0 10px 26px -14px color-mix(in srgb, var(--text) 70%, transparent);
+  transition: filter 0.2s ease, transform 0.2s var(--ease), box-shadow 0.25s ease;
 }
 
 .button:hover {
-  background: transparent;
-  color: var(--text);
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -14px color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+.button:active {
+  transform: scale(0.96);
+}
+
+.button .icon {
+  transition: transform 0.25s var(--ease);
+}
+
+.button:hover .icon {
+  transform: translateY(-2px);
 }
 
 /* Senza icona i due lati hanno lo stesso margine */
@@ -186,7 +218,7 @@ button.button {
   border-radius: var(--radius-pill);
   outline: 0;
   background: var(--surface);
-  transition: border-color 0.18s ease, background-color 0.25s ease;
+  transition: border-color 0.18s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .lock__input::placeholder {
@@ -196,6 +228,7 @@ button.button {
 
 .lock__input:focus {
   border-color: var(--text);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--text) 12%, transparent);
 }
 
 .lock__error {
@@ -221,6 +254,8 @@ html[data-locked] .state--loading {
   display: grid;
   grid-template-rows: auto 1fr;
   border-radius: var(--radius-l);
+  transition: transform 0.3s var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Linguetta colorata: piena se la cartella contiene dispense */
@@ -231,10 +266,11 @@ html[data-locked] .state--loading {
   border-bottom: 0;
   border-radius: 13px 13px 0 0;
   background: var(--accent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 72%, #fff), var(--accent) 60%);
   color: var(--on-accent);
   font: 500 0.72rem/1.4 var(--font-mono);
   white-space: nowrap;
-  transition: padding 0.18s ease, margin 0.18s ease;
+  transition: padding 0.25s var(--ease), margin 0.25s var(--ease);
 }
 
 .folder--empty .folder__tab {
@@ -242,34 +278,101 @@ html[data-locked] .state--loading {
   color: var(--muted);
 }
 
+/* Corpo: una velatura del colore della materia che sfuma verso il basso */
 .folder__body {
+  position: relative;
   display: flex;
   align-items: flex-end;
   min-height: 128px;
   padding: 18px 20px 16px;
+  overflow: hidden;
   border: 1px solid var(--line);
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
   border-radius: 0 var(--radius-l) var(--radius-l) var(--radius-l);
   background: var(--surface);
-  transition: border-color 0.18s ease, background-color 0.18s ease;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, var(--surface)), var(--surface) 62%);
+  transition: border-color 0.25s ease, box-shadow 0.3s ease;
+}
+
+/* Riflesso del colore che si accende al passaggio */
+.folder__body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Freccia in alto a destra */
+.folder__body::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7'/%3E%3Cpath d='M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7'/%3E%3Cpath d='M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
+  opacity: 0;
+  transform: translate(-6px, 6px);
+  transition: opacity 0.25s ease, transform 0.3s var(--ease);
 }
 
 .folder__name {
+  position: relative;
   font: 900 2rem/0.95 var(--font-display);
   text-transform: uppercase;
   overflow-wrap: break-word;
+  min-width: 0;
 }
 
-.folder:hover .folder__body,
+@media (hover: hover) {
+  .folder:hover {
+    transform: translateY(-5px);
+  }
+
+  .folder:hover .folder__body {
+    border-color: var(--accent);
+    box-shadow: 0 22px 44px -22px color-mix(in srgb, var(--accent) 75%, transparent);
+  }
+
+  .folder:hover .folder__body::before {
+    opacity: 1;
+  }
+
+  .folder:hover .folder__body::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Al passaggio la linguetta si alza, come sfilando la cartella */
+  .folder:hover .folder__tab {
+    margin-top: -5px;
+    padding-top: 11px;
+  }
+}
+
 .folder:focus-visible .folder__body {
   border-color: var(--accent);
-  background: var(--surface-raised);
 }
 
-/* Al passaggio la linguetta si alza, come sfilando la cartella */
-.folder:hover .folder__tab,
-.folder:focus-visible .folder__tab {
-  margin-top: -5px;
-  padding-top: 11px;
+.folder:focus-visible .folder__body::before {
+  opacity: 1;
+}
+
+/* Al tocco la cartella si schiaccia appena */
+.folder:active {
+  transform: scale(0.97);
+}
+
+.folder:active .folder__body {
+  border-color: var(--accent);
+}
+
+.folder:active .folder__body::before {
+  opacity: 1;
 }
 
 /* Dispensa --------------------------------------------------------------- */
@@ -283,15 +386,27 @@ html[data-locked] .state--loading {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border: 1px solid var(--line);
+  border-color: color-mix(in srgb, var(--accent) 18%, var(--line));
   border-radius: var(--radius-l);
   background: var(--surface);
-  transition: border-color 0.18s ease, background-color 0.18s ease;
+  background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 14%, var(--surface)), var(--surface) 65%);
+  transition: border-color 0.25s ease, transform 0.3s var(--ease), box-shadow 0.3s ease;
 }
 
 .doc__tile:hover,
 .doc__tile:focus-within {
   border-color: var(--accent);
-  background: var(--surface-raised);
+}
+
+@media (hover: hover) {
+  .doc__tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px -24px color-mix(in srgb, var(--accent) 75%, transparent);
+  }
+}
+
+.doc__tile:active {
+  transform: scale(0.98);
 }
 
 .doc__open {
@@ -310,7 +425,19 @@ html[data-locked] .state--loading {
   color: var(--muted);
   color: color-mix(in srgb, var(--text) 32%, transparent);
   font: 900 clamp(2.4rem, 9vw, 3.5rem) / 1 var(--font-display);
-  transition: color 0.18s ease;
+  transition: color 0.25s ease, transform 0.35s var(--ease);
+}
+
+.doc__tile:hover .doc__ext {
+  transform: scale(1.08);
+}
+
+.doc__thumb {
+  transition: transform 0.5s var(--ease);
+}
+
+.doc__tile:hover .doc__thumb {
+  transform: scale(1.05);
 }
 
 .doc__tile:hover .doc__ext,
@@ -451,6 +578,14 @@ html[data-locked] .state--loading {
   color: var(--text);
 }
 
+.crumb .icon {
+  transition: transform 0.25s var(--ease);
+}
+
+.crumb:hover .icon {
+  transform: translateX(-3px);
+}
+
 /* Messaggi: caricamento, cartella vuota, nessun risultato, errori -------- */
 
 .state {
@@ -459,6 +594,7 @@ html[data-locked] .state--loading {
   padding: clamp(22px, 4vw, 34px);
   border: 1px dashed var(--line);
   border-radius: var(--radius-l);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
   color: var(--muted);
 }
 
@@ -502,7 +638,70 @@ html[data-file] .state--file {
   display: block;
 }
 
-/* Schermi piccoli -------------------------------------------------------- */
+/* Telefoni e schermi stretti: cartelle compatte, due per riga ------------- */
+
+@media (max-width: 700px) {
+  .brand__name {
+    font-size: 1.5rem;
+  }
+
+  .search {
+    height: 40px;
+  }
+
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .folder {
+    --radius-l: 18px;
+  }
+
+  .folder__tab {
+    padding: 4px 10px 3px;
+    border-radius: 10px 10px 0 0;
+    font-size: 0.64rem;
+  }
+
+  .folder__body {
+    min-height: 76px;
+    padding: 12px 14px 11px;
+  }
+
+  .folder__body::after {
+    display: none;
+  }
+
+  .folder__name {
+    font-size: clamp(1.05rem, 5.4vw, 1.6rem);
+    line-height: 1;
+  }
+
+  .doc__tile {
+    --radius-l: 18px;
+    border-radius: 18px;
+  }
+
+  .doc__title {
+    margin-top: 10px;
+    font-size: 0.95rem;
+  }
+
+  /* Le descrizioni lunghe si fermano a quattro righe */
+  .doc__desc {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.84rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  .doc__kind {
+    display: none;
+  }
+}
 
 @media (max-width: 560px) {
   .brand__mark {
@@ -515,23 +714,5 @@ html[data-file] .state--file {
 
   .search {
     padding-right: 16px;
-  }
-
-  .folder__tab {
-    padding-inline: 11px;
-    font-size: 0.68rem;
-  }
-
-  .folder__body {
-    min-height: 104px;
-    padding: 14px 16px;
-  }
-
-  .folder__name {
-    font-size: clamp(1.2rem, 6vw, 2rem);
-  }
-
-  .doc__kind {
-    display: none;
   }
 }
