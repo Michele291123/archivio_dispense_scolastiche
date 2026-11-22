@@ -51,6 +51,7 @@ body:
         - "Funzioni 2 variabili"
         - "Geometria analitica"
         - "Esercizi"
+        - "Integrali"
         - "Nuovo argomento"
     validations:
       required: true
