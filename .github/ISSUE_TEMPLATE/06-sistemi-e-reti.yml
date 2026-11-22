@@ -50,6 +50,7 @@ body:
         - "Laboratorio - CiscoPT"
         - "Livello 4 - Trasporto"
         - "Livello 7 - Applicazione"
+        - "sicurezza"
         - "Nuovo argomento"
     validations:
       required: true
